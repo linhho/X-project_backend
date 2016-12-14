@@ -52,6 +52,7 @@ StoryDescription nvarchar(MAX) NOT NULL,
 StoryStatus smallint NOT NULL,
 AuthorId int NOT NULL,
 CreatedDate datetime NOT NULL,
+LastEditedDate datetime,
 UserId int NOT NULL,
 Rating int,
 Slug nvarchar(50) NOT NULL
@@ -72,6 +73,7 @@ ChapterNumber int NOT NULL,
 ChapterTitle nvarchar(50),
 ChapterContent nvarchar(MAX) NOT NULL,
 UploadedDate datetime NOT NULL,
+LastEditedDate datetime,
 UserId int NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
@@ -83,6 +85,7 @@ ReviewTitle nvarchar(50),
 ReviewContent nvarchar(MAX) NOT NULL,
 ReviewStatus smallint NOT NULL,
 CreatedDate datetime NOT NULL,
+LastEditedDate datetime,
 UserId int NOT NULL,
 Rating int,
 Slug nvarchar(50) NOT NULL
