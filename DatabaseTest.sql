@@ -1,5 +1,35 @@
 ﻿USE [ProjectXdatabase]
 GO
+INSERT INTO [dbo].[Authors]
+           ([AuthorName]
+           ,[Slug])
+     VALUES
+           (N'Nguyễn Nhật Ánh',N'nguyen-nhat-anh')
+GO
+INSERT INTO [dbo].[Authors]
+           ([AuthorName]
+           ,[Slug])
+     VALUES
+           (N'Tô Hoài',N'to-hoai')
+GO
+INSERT INTO [dbo].[Authors]
+           ([AuthorName]
+           ,[Slug])
+     VALUES
+           (N'Andersen',N'Andersen')
+GO
+INSERT INTO [dbo].[Authors]
+           ([AuthorName]
+           ,[Slug])
+     VALUES
+           (N'Trần Đăng Khoa',N'tran-dang-khoa')
+GO
+INSERT INTO [dbo].[Authors]
+           ([AuthorName]
+           ,[Slug])
+     VALUES
+           (N'Nguyên Ngọc',N'nguyen-ngoc')
+GO
 
 INSERT INTO [dbo].[Genres]
            ([GenreName]
@@ -19,7 +49,6 @@ INSERT INTO [dbo].[Genres]
      VALUES
            (N'Thiếu nhi ','thieu-nhi')
 GO
-
 INSERT INTO [dbo].[Genres]
            ([GenreName]
            ,[Slug])
