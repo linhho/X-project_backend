@@ -26,23 +26,6 @@ GenreName nvarchar(50) NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
-CREATE TABLE Roles
-(
-RoleId int IDENTITY(1,1) PRIMARY KEY,
-RoleName nvarchar(50) NOT NULL
-)
-
-CREATE TABLE Users
-(
-UserId int IDENTITY(1,1) PRIMARY KEY,
-RoleId int NOT NULL,
-Email nvarchar(50) NOT NULL,
-Password nvarchar(255) NOT NULL,
-Name nvarchar(50) NOT NULL,
-Avatar nvarchar(255),
-UserStatus smallint NOT NULL
-)
-
 CREATE TABLE Stories
 (
 StoryId int IDENTITY(1,1) PRIMARY KEY,
@@ -104,11 +87,6 @@ ADD CONSTRAINT fk_AuthorStories
 FOREIGN KEY (AuthorId)
 REFERENCES Authors(AuthorId)
 
-ALTER TABLE Stories
-ADD CONSTRAINT fk_UserStories
-FOREIGN KEY (UserId)
-REFERENCES Users(UserId)
-
 ALTER TABLE StoryGenre
 ADD CONSTRAINT fk_StoryGenres
 FOREIGN KEY (StoryId)
@@ -123,26 +101,6 @@ ALTER TABLE Chapters
 ADD CONSTRAINT fk_StoryChapters
 FOREIGN KEY (StoryId)
 REFERENCES Stories(StoryId)
-
-ALTER TABLE Chapters
-ADD CONSTRAINT fk_UserChapters
-FOREIGN KEY (UserId)
-REFERENCES Users(UserId)
-
-ALTER TABLE Reviews
-ADD CONSTRAINT fk_UserReviews
-FOREIGN KEY (UserId)
-REFERENCES Users(UserId)
-
-ALTER TABLE Users
-ADD CONSTRAINT fk_RoleUsers
-FOREIGN KEY (RoleId)
-REFERENCES Roles(RoleId)
-
-ALTER TABLE UserWatch
-ADD CONSTRAINT fk_UserWatches
-FOREIGN KEY (UserId)
-REFERENCES Users(UserId)
 
 ALTER TABLE UserWatch
 ADD CONSTRAINT fk_UsersWatch
