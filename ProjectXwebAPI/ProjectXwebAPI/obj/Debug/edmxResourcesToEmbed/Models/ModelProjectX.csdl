@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProjectXdatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="AuthorId" />
+    </Key>
+    <Property Name="AuthorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AuthorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Stories" Relationship="Self.fk_AuthorStories" FromRole="Authors" ToRole="Stories" />
+  </EntityType>
+  <EntityType Name="Chapter">
+    <Key>
+      <PropertyRef Name="ChapterId" />
+    </Key>
+    <Property Name="ChapterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StoryId" Type="Int32" Nullable="false" />
+    <Property Name="ChapterNumber" Type="Int32" Nullable="false" />
+    <Property Name="ChapterTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChapterContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UploadedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Story" Relationship="Self.fk_StoryChapters" FromRole="Chapters" ToRole="Stories" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="GenreId" />
+    </Key>
+    <Property Name="GenreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GenreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Stories" Relationship="Self.StoryGenre" FromRole="Genres" ToRole="Stories" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="ReviewId" />
+    </Key>
+    <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReviewTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ReviewContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ReviewStatus" Type="Int16" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Rating" Type="Int32" />
+    <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Story">
+    <Key>
+      <PropertyRef Name="StoryId" />
+    </Key>
+    <Property Name="StoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StoryProgress" Type="Int16" Nullable="false" />
+    <Property Name="StoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StoryStatus" Type="Int16" Nullable="false" />
+    <Property Name="AuthorId" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Rating" Type="Int32" />
+    <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Author" Relationship="Self.fk_AuthorStories" FromRole="Stories" ToRole="Authors" />
+    <NavigationProperty Name="Chapters" Relationship="Self.fk_StoryChapters" FromRole="Stories" ToRole="Chapters" />
+    <NavigationProperty Name="UserWatches" Relationship="Self.fk_UsersWatch" FromRole="Stories" ToRole="UserWatch" />
+    <NavigationProperty Name="Genres" Relationship="Self.StoryGenre" FromRole="Stories" ToRole="Genres" />
+  </EntityType>
+  <EntityType Name="UserWatch">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="StoryId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="StoryId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Story" Relationship="Self.fk_UsersWatch" FromRole="UserWatch" ToRole="Stories" />
+  </EntityType>
+  <Association Name="fk_AuthorStories">
+    <End Role="Authors" Type="Self.Author" Multiplicity="1" />
+    <End Role="Stories" Type="Self.Story" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Authors">
+        <PropertyRef Name="AuthorId" />
+      </Principal>
+      <Dependent Role="Stories">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_StoryChapters">
+    <End Role="Stories" Type="Self.Story" Multiplicity="1" />
+    <End Role="Chapters" Type="Self.Chapter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stories">
+        <PropertyRef Name="StoryId" />
+      </Principal>
+      <Dependent Role="Chapters">
+        <PropertyRef Name="StoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_UsersWatch">
+    <End Role="Stories" Type="Self.Story" Multiplicity="1" />
+    <End Role="UserWatch" Type="Self.UserWatch" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stories">
+        <PropertyRef Name="StoryId" />
+      </Principal>
+      <Dependent Role="UserWatch">
+        <PropertyRef Name="StoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="StoryGenre">
+    <End Role="Genres" Type="Self.Genre" Multiplicity="*" />
+    <End Role="Stories" Type="Self.Story" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="ProjectXdatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="Chapters" EntityType="Self.Chapter" />
+    <EntitySet Name="Genres" EntityType="Self.Genre" />
+    <EntitySet Name="Reviews" EntityType="Self.Review" />
+    <EntitySet Name="Stories" EntityType="Self.Story" />
+    <EntitySet Name="UserWatches" EntityType="Self.UserWatch" />
+    <AssociationSet Name="fk_AuthorStories" Association="Self.fk_AuthorStories">
+      <End Role="Authors" EntitySet="Authors" />
+      <End Role="Stories" EntitySet="Stories" />
+    </AssociationSet>
+    <AssociationSet Name="fk_StoryChapters" Association="Self.fk_StoryChapters">
+      <End Role="Stories" EntitySet="Stories" />
+      <End Role="Chapters" EntitySet="Chapters" />
+    </AssociationSet>
+    <AssociationSet Name="fk_UsersWatch" Association="Self.fk_UsersWatch">
+      <End Role="Stories" EntitySet="Stories" />
+      <End Role="UserWatch" EntitySet="UserWatches" />
+    </AssociationSet>
+    <AssociationSet Name="StoryGenre" Association="Self.StoryGenre">
+      <End Role="Genres" EntitySet="Genres" />
+      <End Role="Stories" EntitySet="Stories" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

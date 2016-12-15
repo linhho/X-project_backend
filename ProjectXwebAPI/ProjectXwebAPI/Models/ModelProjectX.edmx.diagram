@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="566040ffa9a443a3827a92c72a57e5c8" Name="Diagram1">
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.Author" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.Chapter" Width="1.5" PointX="5.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.Genre" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.Review" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.Story" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectXdatabaseModel.UserWatch" Width="1.5" PointX="5.25" PointY="5.75" IsExpanded="true" />
+        <AssociationConnector Association="ProjectXdatabaseModel.fk_AuthorStories" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectXdatabaseModel.fk_StoryChapters" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectXdatabaseModel.fk_UsersWatch" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectXdatabaseModel.StoryGenre" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
