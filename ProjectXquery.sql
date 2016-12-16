@@ -30,14 +30,16 @@ CREATE TABLE Stories
 (
 StoryId int IDENTITY(1,1) PRIMARY KEY,
 StoryName nvarchar(50) NOT NULL,
-StoryProgress smallint NOT NULL,
+StoryProgress int NOT NULL,
 StoryDescription nvarchar(MAX) NOT NULL,
-StoryStatus smallint NOT NULL,
+StoryStatus int NOT NULL,
 AuthorId int NOT NULL,
 CreatedDate datetime NOT NULL,
 LastEditedDate datetime,
-UserId int NOT NULL,
-Rating int,
+UserId nvarchar(50) NOT NULL,
+Score int NOT NULL,
+RateCount int NOT NULL,
+Image nvarchar(255) NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
@@ -57,7 +59,7 @@ ChapterTitle nvarchar(50),
 ChapterContent nvarchar(MAX) NOT NULL,
 UploadedDate datetime NOT NULL,
 LastEditedDate datetime,
-UserId int NOT NULL,
+UserId nvarchar(50) NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
@@ -66,17 +68,19 @@ CREATE TABLE Reviews
 ReviewId int IDENTITY(1,1) PRIMARY KEY,
 ReviewTitle nvarchar(50),
 ReviewContent nvarchar(MAX) NOT NULL,
-ReviewStatus smallint NOT NULL,
+ReviewStatus int NOT NULL,
 CreatedDate datetime NOT NULL,
 LastEditedDate datetime,
-UserId int NOT NULL,
-Rating int,
+UserId nvarchar(50) NOT NULL,
+Score int NOT NULL,
+RateCount int NOT NULL,
+Image nvarchar(255) NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
 CREATE TABLE UserWatch
 (
-UserId int NOT NULL,
+UserId nvarchar(50) NOT NULL,
 StoryId int NOT NULL,
 PRIMARY KEY (UserId,StoryId)
 )
