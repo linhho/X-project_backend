@@ -17,11 +17,13 @@ namespace ProjectXwebAPI.Models
         public int ReviewId { get; set; }
         public string ReviewTitle { get; set; }
         public string ReviewContent { get; set; }
-        public short ReviewStatus { get; set; }
+        public int ReviewStatus { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> LastEditedDate { get; set; }
-        public int UserId { get; set; }
-        public Nullable<int> Rating { get; set; }
+        public string UserId { get; set; }
+        public int Score { get; set; }
+        public int RateCount { get; set; }
+        public string Image { get; set; }
         public string Slug { get; set; }
     }
 }

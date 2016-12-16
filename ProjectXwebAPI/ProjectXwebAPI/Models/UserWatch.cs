@@ -14,7 +14,7 @@ namespace ProjectXwebAPI.Models
     
     public partial class UserWatch
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int StoryId { get; set; }
     
         public virtual Story Story { get; set; }

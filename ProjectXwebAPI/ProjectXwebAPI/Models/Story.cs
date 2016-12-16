@@ -24,14 +24,16 @@ namespace ProjectXwebAPI.Models
     
         public int StoryId { get; set; }
         public string StoryName { get; set; }
-        public short StoryProgress { get; set; }
+        public int StoryProgress { get; set; }
         public string StoryDescription { get; set; }
-        public short StoryStatus { get; set; }
+        public int StoryStatus { get; set; }
         public int AuthorId { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> LastEditedDate { get; set; }
-        public int UserId { get; set; }
-        public Nullable<int> Rating { get; set; }
+        public string UserId { get; set; }
+        public int Score { get; set; }
+        public int RateCount { get; set; }
+        public string Image { get; set; }
         public string Slug { get; set; }
     
         public virtual Author Author { get; set; }

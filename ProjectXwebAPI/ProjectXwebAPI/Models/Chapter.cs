@@ -21,7 +21,7 @@ namespace ProjectXwebAPI.Models
         public string ChapterContent { get; set; }
         public System.DateTime UploadedDate { get; set; }
         public Nullable<System.DateTime> LastEditedDate { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Slug { get; set; }
     
         public virtual Story Story { get; set; }
