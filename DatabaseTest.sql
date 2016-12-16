@@ -66,10 +66,12 @@ INSERT INTO [dbo].[Stories]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Tôi thấy hoa vàng trên cỏ xanh',-1,N'truyện ngắn đặc sắc nhất về tuổi học trò của Nguyễn Nhật Ánh',-1,1,'20120618 10:34:09 AM','20120618 11:34:09 AM',1,5,N'toi-thay-hoa-vang-tren-co-xanh')
+           (N'Tôi thấy hoa vàng trên cỏ xanh',-1,N'truyện ngắn đặc sắc nhất về tuổi học trò của Nguyễn Nhật Ánh',-1,1,'20120618 10:34:09 AM','20120618 11:34:09 AM','1',5,2,'image1.jpg',N'toi-thay-hoa-vang-tren-co-xanh')
 GO
 
 INSERT INTO [dbo].[Stories]
@@ -81,10 +83,12 @@ INSERT INTO [dbo].[Stories]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+          ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Dế mèn phiêu lưu ký',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Tô Hoài',1,2,'20120618 10:34:09 AM','20120618 11:34:09 AM',2,5,N'de-men-phieu-luu-ky')
+           (N'Dế mèn phiêu lưu ký',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Tô Hoài',1,2,'20120618 10:34:09 AM','20120618 11:34:09 AM','2',10,3,'image2.jpg',N'de-men-phieu-luu-ky')
 GO
 
 INSERT INTO [dbo].[Stories]
@@ -96,10 +100,12 @@ INSERT INTO [dbo].[Stories]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Cô bé bán diêm',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Andersen',1,3,'20120618 10:34:09 AM','20120618 11:34:09 AM',3,5,N'co-be-ban-diem')
+           (N'Cô bé bán diêm',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Andersen',1,3,'20120618 10:34:09 AM','20120618 11:34:09 AM','3',5,2,'image3.jpg',N'co-be-ban-diem')
 GO
 INSERT INTO [dbo].[Stories]
            ([StoryName]
@@ -110,10 +116,12 @@ INSERT INTO [dbo].[Stories]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+		   ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Góc sân và khoảng trời',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Trần Đăng Khoa ',1,4,'20120618 10:34:09 AM','20120618 11:34:09 AM',4,5,N'goc-san-va-khoang-troi')
+           (N'Góc sân và khoảng trời',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Trần Đăng Khoa ',1,4,'20120618 10:34:09 AM','20120618 11:34:09 AM','4',8,10,'image4.jpg',N'goc-san-va-khoang-troi')
 GO
 
 INSERT INTO [dbo].[Stories]
@@ -125,10 +133,12 @@ INSERT INTO [dbo].[Stories]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Rừng xà nu',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Nguyên Ngọc',1,5,'20120618 10:34:09 AM','20120618 11:34:09 AM',3,5,N'rung-xa-nu')
+           (N'Rừng xà nu',0,N'truyện ngắn đặc sắc nhất về tuổi học trò của Nguyên Ngọc',1,5,'20120618 10:34:09 AM','20120618 11:34:09 AM','5',5,2,'image5.jpg',N'rung-xa-nu')
 GO
 
 
@@ -284,10 +294,12 @@ INSERT INTO [dbo].[Reviews]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Bài review 1',N'Nội dung bài review 1',1,'2016-11-12','2016-11-13',1,5,N'bai-review-1')
+           (N'Bài review 1',N'Nội dung bài review 1',1,'2016-11-12','2016-11-13','1',5,2,'image11.jpg',N'bai-review-1')
 GO
 
 INSERT INTO [dbo].[Reviews]
@@ -297,10 +309,12 @@ INSERT INTO [dbo].[Reviews]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Bài review 2',N'Nội dung bài review 2',1,'2016-11-12','2016-11-13',2,5,N'bai-review-2')
+           (N'Bài review 2',N'Nội dung bài review 2',1,'2016-11-12','2016-11-13','2',10,2,'image12.jpg',N'bai-review-2')
 GO
 
 INSERT INTO [dbo].[Reviews]
@@ -310,10 +324,12 @@ INSERT INTO [dbo].[Reviews]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Bài review 3',N'Nội dung bài review 3',1,'2016-11-12','2016-11-13',3,5,N'bai-review-3')
+           (N'Bài review 3',N'Nội dung bài review 3',1,'2016-11-12','2016-11-13','3',5,2,'image13.jpg',N'bai-review-3')
 GO
 
 INSERT INTO [dbo].[Reviews]
@@ -323,10 +339,12 @@ INSERT INTO [dbo].[Reviews]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Bài review 4',N'Nội dung bài review 4',1,'2016-11-12','2016-11-13',4,5,N'bai-review-2')
+           (N'Bài review 4',N'Nội dung bài review 4',1,'2016-11-12','2016-11-13','4',8,3,'image14.jpg',N'bai-review-2')
 GO
 
 INSERT INTO [dbo].[Reviews]
@@ -336,10 +354,12 @@ INSERT INTO [dbo].[Reviews]
            ,[CreatedDate]
            ,[LastEditedDate]
            ,[UserId]
-           ,[Rating]
+           ,[Score]
+		   ,[RateCount]
+		   ,[Image]
            ,[Slug])
      VALUES
-           (N'Bài review 5',N'Nội dung bài review 5',1,'2016-11-12','2016-11-13',5,5,N'bai-review-5')
+           (N'Bài review 5',N'Nội dung bài review 5',1,'2016-11-12','2016-11-13','5',5,2,'image15.jpg',N'bai-review-5')
 GO
 
 
