@@ -235,7 +235,7 @@ namespace ProjectXwebAPI.Controllers
                             Slug = s.Slug
                         });
 
-            var q = from s in storyVMs orderby SqlFunctions.Exp((double) (s.Score/s.RateCount)) descending select s;
+            var q = storyVMs.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
 
             if (top > q.Count())
             {
@@ -324,6 +324,22 @@ namespace ProjectXwebAPI.Controllers
                         Slug = s.Slug
                     });
             return storyVMs;
+        }
+
+        // GET: api/Stories/users/10
+        [Route("api/Stories/users/{top}", Name = "UserRankApi")]
+        public IQueryable<String> GetUserByRank(int top)
+        {
+            var q = db.Stories.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
+
+            if (top > q.Count())
+            {
+                top = q.Count();
+            }
+
+            IQueryable<String> users = from s in q select s.UserId;
+
+            return users.Take(top);
         }
 
         // GET: api/Stories/5

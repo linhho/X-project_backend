@@ -20,8 +20,6 @@ namespace ProjectXwebAPI.ViewModels
         public string Image { get; set; }
         public string Slug { get; set; }
 
-        public ICollection<Chapter> Chapters { get; set; }
-
         public StorySearchVM() { }
 
         public StorySearchVM(Story story)
