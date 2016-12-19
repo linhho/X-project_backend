@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
+using ProjectXwebAPI.ViewModels;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -20,6 +22,109 @@ namespace ProjectXwebAPI.Controllers
         public IQueryable<Review> GetReviews()
         {
             return db.Reviews;
+        }
+
+        // GET: api/Reviews/range/1/5
+        public IQueryable<ReviewVM> GetReviewsByRange(int start, int end)
+        {
+            IQueryable<ReviewVM> reviewVMs =
+                db.Reviews.Select(
+                    r =>
+                        new ReviewVM
+                        {
+                            ReviewId = r.ReviewId,
+                            ReviewTitle = r.ReviewTitle,
+                            UserId = r.UserId,
+                            Score = r.Score,
+                            RateCount = r.RateCount,
+                            Image = r.Image,
+                            Slug = r.Slug
+                        });
+
+            var q = reviewVMs.OrderByDescending(r => r.ReviewId);
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > q.Count())
+            {
+                end = q.Count();
+            }
+
+            int begin = start - 1;
+
+            return q.Skip(begin).Take(end - begin);
+        }
+
+        // GET: api/Reviews/user/U
+        public IQueryable<ReviewVM> GetReviewsByUser(string userId)
+        {
+            IQueryable<Review> reviews = from r in db.Reviews where r.UserId.Equals(userId) select r;
+
+            IQueryable<ReviewVM> reviewVMs = reviews.Select(
+                r =>
+                    new ReviewVM
+                    {
+                        ReviewId = r.ReviewId,
+                        ReviewTitle = r.ReviewTitle,
+                        UserId = r.UserId,
+                        Score = r.Score,
+                        RateCount = r.RateCount,
+                        Image = r.Image,
+                        Slug = r.Slug
+                    });
+            return reviewVMs;
+        }
+
+        // GET: api/Reviews/rank/20
+        public IQueryable<ReviewVM> GetReviewsByRank(int top)
+        {
+            IQueryable<ReviewVM> reviewVMs =
+                db.Reviews.Select(
+                    r =>
+                        new ReviewVM
+                        {
+                            ReviewId = r.ReviewId,
+                            ReviewTitle = r.ReviewTitle,
+                            UserId = r.UserId,
+                            Score = r.Score,
+                            RateCount = r.RateCount,
+                            Image = r.Image,
+                            Slug = r.Slug
+                        });
+
+            var q = reviewVMs.OrderByDescending(r => SqlFunctions.Exp((double) (r.Score/r.RateCount)));
+
+            if (top > q.Count())
+            {
+                top = q.Count();
+            }
+
+            return q.Take(top);
+        }
+
+        // GET: api/Reviews/search/N
+        public IQueryable<ReviewVM> GetReviewsByName(string name)
+        {
+            IQueryable<Review> reviews = from r in db.Reviews
+                where r.ReviewTitle.Contains(name) || r.Slug.Contains(name)
+                select r;
+
+            IQueryable<ReviewVM> reviewVMs = reviews.Select(
+                r =>
+                    new ReviewVM
+                    {
+                        ReviewId = r.ReviewId,
+                        ReviewTitle = r.ReviewTitle,
+                        UserId = r.UserId,
+                        Score = r.Score,
+                        RateCount = r.RateCount,
+                        Image = r.Image,
+                        Slug = r.Slug
+                    });
+            return reviewVMs;
         }
 
         // GET: api/Reviews/5
@@ -95,7 +200,9 @@ namespace ProjectXwebAPI.Controllers
                 return NotFound();
             }
 
-            db.Reviews.Remove(review);
+            //db.Reviews.Remove(review);
+            review.ReviewStatus = -1;
+            db.Entry(review).State = EntityState.Modified;
             db.SaveChanges();
 
             return Ok(review);

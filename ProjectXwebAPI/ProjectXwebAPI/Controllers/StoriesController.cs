@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -52,8 +53,276 @@ namespace ProjectXwebAPI.Controllers
                             Score = s.Score,
                             RateCount = s.RateCount,
                             Image = s.Image,
+                            Slug = s.Slug,
+                            Chapters = s.Chapters.Select(c =>
+                                new ChapterStoryVM
+                                {
+                                    ChapterId = c.ChapterId,
+                                    ChapterNumber = c.ChapterNumber,
+                                    ChapterTitle = c.ChapterTitle,
+                                    Slug = c.Slug,
+                                    StoryId = c.StoryId
+                                })
+                        });
+            return storyVMs;
+        }
+
+        // GET: api/Stories/range/1/5
+        public IQueryable<StorySearchVM> GetStoriesByRange(int start, int end)
+        {
+            IQueryable<StorySearchVM> storyVMs =
+                db.Stories.Select(
+                    s =>
+                        new StorySearchVM
+                        {
+                            StoryId = s.StoryId,
+                            StoryName = s.StoryName,
+                            StoryProgress = s.StoryProgress,
+                            StoryStatus = s.StoryStatus,
+                            Author =
+                                new AuthorVM
+                                {
+                                    AuthorId = s.AuthorId,
+                                    AuthorName = s.Author.AuthorName,
+                                    AuthorStatus = s.Author.AuthorStatus,
+                                    Slug = s.Author.Slug
+                                },
+                            Genres = s.Genres.Select(g =>
+                                new GenreVM
+                                {
+                                    GenreId = g.GenreId,
+                                    GenreName = g.GenreName,
+                                    GenreStatus = g.GenreStatus,
+                                    Slug = g.Slug
+                                }),
+                            UserId = s.UserId,
+                            Score = s.Score,
+                            RateCount = s.RateCount,
+                            Image = s.Image,
                             Slug = s.Slug
                         });
+
+            var q = storyVMs.OrderByDescending(s => s.StoryId);
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > q.Count())
+            {
+                end = q.Count();
+            }
+
+            int begin = start - 1;
+
+            return q.Skip(begin).Take(end - begin);
+        }
+
+        // GET: api/Stories/author/A
+        [Route("api/Stories/author/{name}", Name = "AuthorApi")]
+        public IQueryable<StorySearchVM> GetStoriesByAuthor(string name)
+        {
+            IQueryable<Story> stories = from s in db.Stories
+                where s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)
+                select s;
+
+            IQueryable<StorySearchVM> storyVMs = stories.Select(
+                s =>
+                    new StorySearchVM
+                    {
+                        StoryId = s.StoryId,
+                        StoryName = s.StoryName,
+                        StoryProgress = s.StoryProgress,
+                        StoryStatus = s.StoryStatus,
+                        Author =
+                            new AuthorVM
+                            {
+                                AuthorId = s.AuthorId,
+                                AuthorName = s.Author.AuthorName,
+                                AuthorStatus = s.Author.AuthorStatus,
+                                Slug = s.Author.Slug
+                            },
+                        Genres = s.Genres.Select(g =>
+                            new GenreVM
+                            {
+                                GenreId = g.GenreId,
+                                GenreName = g.GenreName,
+                                GenreStatus = g.GenreStatus,
+                                Slug = g.Slug
+                            }),
+                        UserId = s.UserId,
+                        Score = s.Score,
+                        RateCount = s.RateCount,
+                        Image = s.Image,
+                        Slug = s.Slug
+                    });
+            return storyVMs;
+        }
+
+        // GET: api/Stories/user/U
+        public IQueryable<StorySearchVM> GetStoriesByUser(string userId)
+        {
+            IQueryable<Story> stories = from s in db.Stories
+                where s.UserId.Equals(userId)
+                select s;
+
+            IQueryable<StorySearchVM> storyVMs = stories.Select(
+                s =>
+                    new StorySearchVM
+                    {
+                        StoryId = s.StoryId,
+                        StoryName = s.StoryName,
+                        StoryProgress = s.StoryProgress,
+                        StoryStatus = s.StoryStatus,
+                        Author =
+                            new AuthorVM
+                            {
+                                AuthorId = s.AuthorId,
+                                AuthorName = s.Author.AuthorName,
+                                AuthorStatus = s.Author.AuthorStatus,
+                                Slug = s.Author.Slug
+                            },
+                        Genres = s.Genres.Select(g =>
+                            new GenreVM
+                            {
+                                GenreId = g.GenreId,
+                                GenreName = g.GenreName,
+                                GenreStatus = g.GenreStatus,
+                                Slug = g.Slug
+                            }),
+                        UserId = s.UserId,
+                        Score = s.Score,
+                        RateCount = s.RateCount,
+                        Image = s.Image,
+                        Slug = s.Slug
+                    });
+            return storyVMs;
+        }
+
+        // GET: api/Stories/rank/20
+        public IQueryable<StorySearchVM> GetStoriesByRank(int top)
+        {
+            IQueryable<StorySearchVM> storyVMs =
+                db.Stories.Select(
+                    s =>
+                        new StorySearchVM
+                        {
+                            StoryId = s.StoryId,
+                            StoryName = s.StoryName,
+                            StoryProgress = s.StoryProgress,
+                            StoryStatus = s.StoryStatus,
+                            Author =
+                                new AuthorVM
+                                {
+                                    AuthorId = s.AuthorId,
+                                    AuthorName = s.Author.AuthorName,
+                                    AuthorStatus = s.Author.AuthorStatus,
+                                    Slug = s.Author.Slug
+                                },
+                            Genres = s.Genres.Select(g =>
+                                new GenreVM
+                                {
+                                    GenreId = g.GenreId,
+                                    GenreName = g.GenreName,
+                                    GenreStatus = g.GenreStatus,
+                                    Slug = g.Slug
+                                }),
+                            UserId = s.UserId,
+                            Score = s.Score,
+                            RateCount = s.RateCount,
+                            Image = s.Image,
+                            Slug = s.Slug
+                        });
+
+            var q = from s in storyVMs orderby SqlFunctions.Exp((double) (s.Score/s.RateCount)) descending select s;
+
+            if (top > q.Count())
+            {
+                top = q.Count();
+            }
+
+            return q.Take(top);
+        }
+
+        // GET: api/Stories/genre/G
+        [Route("api/Stories/genre/{name}", Name = "GenreApi")]
+        public IQueryable<StorySearchVM> GetStoriesByGenre(string name)
+        {
+            IQueryable<Story> stories = from s in db.Stories
+                where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0
+                select s;
+
+            IQueryable<StorySearchVM> storyVMs = stories.Select(
+                s =>
+                    new StorySearchVM
+                    {
+                        StoryId = s.StoryId,
+                        StoryName = s.StoryName,
+                        StoryProgress = s.StoryProgress,
+                        StoryStatus = s.StoryStatus,
+                        Author =
+                            new AuthorVM
+                            {
+                                AuthorId = s.AuthorId,
+                                AuthorName = s.Author.AuthorName,
+                                AuthorStatus = s.Author.AuthorStatus,
+                                Slug = s.Author.Slug
+                            },
+                        Genres = s.Genres.Select(g =>
+                            new GenreVM
+                            {
+                                GenreId = g.GenreId,
+                                GenreName = g.GenreName,
+                                GenreStatus = g.GenreStatus,
+                                Slug = g.Slug
+                            }),
+                        UserId = s.UserId,
+                        Score = s.Score,
+                        RateCount = s.RateCount,
+                        Image = s.Image,
+                        Slug = s.Slug
+                    });
+            return storyVMs;
+        }
+
+        // GET: api/Stories/search/S
+        public IQueryable<StorySearchVM> GetStoriesByName(string name)
+        {
+            IQueryable<Story> stories = from s in db.Stories
+                where s.StoryName.Contains(name) || s.Slug.Contains(name)
+                select s;
+
+            IQueryable<StorySearchVM> storyVMs = stories.Select(
+                s =>
+                    new StorySearchVM
+                    {
+                        StoryId = s.StoryId,
+                        StoryName = s.StoryName,
+                        StoryProgress = s.StoryProgress,
+                        StoryStatus = s.StoryStatus,
+                        Author =
+                            new AuthorVM
+                            {
+                                AuthorId = s.AuthorId,
+                                AuthorName = s.Author.AuthorName,
+                                AuthorStatus = s.Author.AuthorStatus,
+                                Slug = s.Author.Slug
+                            },
+                        Genres = s.Genres.Select(g =>
+                            new GenreVM
+                            {
+                                GenreId = g.GenreId,
+                                GenreName = g.GenreName,
+                                GenreStatus = g.GenreStatus,
+                                Slug = g.Slug
+                            }),
+                        UserId = s.UserId,
+                        Score = s.Score,
+                        RateCount = s.RateCount,
+                        Image = s.Image,
+                        Slug = s.Slug
+                    });
             return storyVMs;
         }
 
@@ -138,7 +407,9 @@ namespace ProjectXwebAPI.Controllers
                 return NotFound();
             }
 
-            db.Stories.Remove(story);
+            //db.Stories.Remove(story);
+            story.StoryStatus = -1;
+            db.Entry(story).State = EntityState.Modified;
             db.SaveChanges();
 
             return Ok(story);

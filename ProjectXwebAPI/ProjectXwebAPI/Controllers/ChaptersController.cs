@@ -117,7 +117,9 @@ namespace ProjectXwebAPI.Controllers
                 return NotFound();
             }
 
-            db.Chapters.Remove(chapter);
+            //db.Chapters.Remove(chapter);
+            chapter.ChapterStatus = -1;
+            db.Entry(chapter).State = EntityState.Modified;
             db.SaveChanges();
 
             return Ok(chapter);

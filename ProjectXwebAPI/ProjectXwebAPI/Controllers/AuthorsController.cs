@@ -113,7 +113,9 @@ namespace ProjectXwebAPI.Controllers
                 return NotFound();
             }
 
-            db.Authors.Remove(author);
+            //db.Authors.Remove(author);
+            author.AuthorStatus = -1;
+            db.Entry(author).State = EntityState.Modified;
             db.SaveChanges();
 
             return Ok(author);

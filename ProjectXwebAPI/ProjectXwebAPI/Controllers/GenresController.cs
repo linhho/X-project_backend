@@ -114,7 +114,9 @@ namespace ProjectXwebAPI.Controllers
                 return NotFound();
             }
 
-            db.Genres.Remove(genre);
+            //db.Genres.Remove(genre);
+            genre.GenreStatus = -1;
+            db.Entry(genre).State = EntityState.Modified;
             db.SaveChanges();
 
             return Ok(genre);

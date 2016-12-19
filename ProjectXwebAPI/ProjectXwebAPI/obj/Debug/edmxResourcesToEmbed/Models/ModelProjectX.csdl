@@ -6,6 +6,7 @@
     </Key>
     <Property Name="AuthorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="AuthorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="AuthorStatus" Type="Int32" Nullable="false" />
     <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Stories" Relationship="Self.fk_AuthorStories" FromRole="Authors" ToRole="Stories" />
   </EntityType>
@@ -18,9 +19,10 @@
     <Property Name="ChapterNumber" Type="Int32" Nullable="false" />
     <Property Name="ChapterTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ChapterContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ChapterStatus" Type="Int32" Nullable="false" />
     <Property Name="UploadedDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
-    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Story" Relationship="Self.fk_StoryChapters" FromRole="Chapters" ToRole="Stories" />
   </EntityType>
@@ -30,6 +32,7 @@
     </Key>
     <Property Name="GenreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="GenreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GenreStatus" Type="Int32" Nullable="false" />
     <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Stories" Relationship="Self.StoryGenre" FromRole="Genres" ToRole="Stories" />
   </EntityType>
@@ -40,11 +43,13 @@
     <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ReviewTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ReviewContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ReviewStatus" Type="Int16" Nullable="false" />
+    <Property Name="ReviewStatus" Type="Int32" Nullable="false" />
     <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
-    <Property Name="UserId" Type="Int32" Nullable="false" />
-    <Property Name="Rating" Type="Int32" />
+    <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Score" Type="Int32" Nullable="false" />
+    <Property Name="RateCount" Type="Int32" Nullable="false" />
+    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
   <EntityType Name="Story">
@@ -53,14 +58,16 @@
     </Key>
     <Property Name="StoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="StoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="StoryProgress" Type="Int16" Nullable="false" />
+    <Property Name="StoryProgress" Type="Int32" Nullable="false" />
     <Property Name="StoryDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="StoryStatus" Type="Int16" Nullable="false" />
+    <Property Name="StoryStatus" Type="Int32" Nullable="false" />
     <Property Name="AuthorId" Type="Int32" Nullable="false" />
     <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
-    <Property Name="UserId" Type="Int32" Nullable="false" />
-    <Property Name="Rating" Type="Int32" />
+    <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Score" Type="Int32" Nullable="false" />
+    <Property Name="RateCount" Type="Int32" Nullable="false" />
+    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Author" Relationship="Self.fk_AuthorStories" FromRole="Stories" ToRole="Authors" />
     <NavigationProperty Name="Chapters" Relationship="Self.fk_StoryChapters" FromRole="Stories" ToRole="Chapters" />
@@ -72,7 +79,7 @@
       <PropertyRef Name="UserId" />
       <PropertyRef Name="StoryId" />
     </Key>
-    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="StoryId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Story" Relationship="Self.fk_UsersWatch" FromRole="UserWatch" ToRole="Stories" />
   </EntityType>

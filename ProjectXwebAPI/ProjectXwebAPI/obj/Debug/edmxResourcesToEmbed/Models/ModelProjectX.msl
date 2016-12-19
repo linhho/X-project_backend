@@ -6,6 +6,7 @@
         <MappingFragment StoreEntitySet="Authors">
           <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
           <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
+          <ScalarProperty Name="AuthorStatus" ColumnName="AuthorStatus" />
           <ScalarProperty Name="Slug" ColumnName="Slug" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -18,6 +19,7 @@
           <ScalarProperty Name="ChapterNumber" ColumnName="ChapterNumber" />
           <ScalarProperty Name="ChapterTitle" ColumnName="ChapterTitle" />
           <ScalarProperty Name="ChapterContent" ColumnName="ChapterContent" />
+          <ScalarProperty Name="ChapterStatus" ColumnName="ChapterStatus" />
           <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
           <ScalarProperty Name="LastEditedDate" ColumnName="LastEditedDate" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -30,6 +32,7 @@
         <MappingFragment StoreEntitySet="Genres">
           <ScalarProperty Name="GenreId" ColumnName="GenreId" />
           <ScalarProperty Name="GenreName" ColumnName="GenreName" />
+          <ScalarProperty Name="GenreStatus" ColumnName="GenreStatus" />
           <ScalarProperty Name="Slug" ColumnName="Slug" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -44,7 +47,9 @@
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="LastEditedDate" ColumnName="LastEditedDate" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="RateCount" ColumnName="RateCount" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
           <ScalarProperty Name="Slug" ColumnName="Slug" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -61,7 +66,9 @@
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="LastEditedDate" ColumnName="LastEditedDate" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="RateCount" ColumnName="RateCount" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
           <ScalarProperty Name="Slug" ColumnName="Slug" />
         </MappingFragment>
       </EntityTypeMapping>

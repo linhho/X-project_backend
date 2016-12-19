@@ -23,7 +23,7 @@ namespace ProjectXwebAPI.ViewModels
         public string Image { get; set; }
         public string Slug { get; set; }
 
-        public IEnumerable<Chapter> Chapters { get; set; }
+        public IEnumerable<ChapterStoryVM> Chapters { get; set; }
 
         public StoryVM() { }
 
@@ -50,6 +50,18 @@ namespace ProjectXwebAPI.ViewModels
             this.RateCount = story.RateCount;
             this.Image = story.Image;
             this.Slug = story.Slug;
+
+            this.Chapters =
+                story.Chapters.Select(
+                    c =>
+                        new ChapterStoryVM
+                        {
+                            ChapterId = c.ChapterId,
+                            ChapterNumber = c.ChapterNumber,
+                            ChapterTitle = c.ChapterTitle,
+                            Slug = c.Slug,
+                            StoryId = c.StoryId
+                        });
         }
     }
 }
