@@ -28,15 +28,24 @@ namespace ProjectXwebAPI.Controllers
                             StoryId = s.StoryId,
                             StoryName = s.StoryName,
                             StoryProgress = s.StoryProgress,
-                            StoryDescription = s.StoryDescription,
                             StoryStatus = s.StoryStatus,
+                            StoryDescription = s.StoryDescription,
                             Author =
                                 new AuthorVM
                                 {
                                     AuthorId = s.AuthorId,
                                     AuthorName = s.Author.AuthorName,
+                                    AuthorStatus = s.Author.AuthorStatus,
                                     Slug = s.Author.Slug
                                 },
+                            Genres = s.Genres.Select(g =>
+                                new GenreVM
+                                {
+                                    GenreId = g.GenreId,
+                                    GenreName = g.GenreName,
+                                    GenreStatus = g.GenreStatus,
+                                    Slug = g.Slug
+                                }),
                             CreatedDate = s.CreatedDate,
                             LastEditedDate = s.LastEditedDate,
                             UserId = s.UserId,
@@ -155,7 +164,27 @@ namespace ProjectXwebAPI.Controllers
             story.StoryProgress = storyVM.StoryProgress;
             story.StoryStatus = storyVM.StoryStatus;
             story.StoryDescription = storyVM.StoryDescription;
+            story.AuthorId = storyVM.Author.AuthorId;
+            story.Author = new Author
+            {
+                AuthorId = storyVM.Author.AuthorId,
+                AuthorName = storyVM.Author.AuthorName,
+                AuthorStatus = storyVM.Author.AuthorStatus,
+                Slug = storyVM.Author.Slug
+            };
+            story.Genres =
+                storyVM.Genres.Select(
+                    g =>
+                        new Genre
+                        {
+                            GenreId = g.GenreId,
+                            GenreName = g.GenreName,
+                            GenreStatus = g.GenreStatus,
+                            Slug = g.Slug
+                        }).ToList();
+            story.CreatedDate = storyVM.CreatedDate;
             story.LastEditedDate = storyVM.LastEditedDate;
+            story.UserId = storyVM.UserId;
             story.Score = storyVM.Score;
             story.RateCount = storyVM.RateCount;
             story.Image = storyVM.Image;

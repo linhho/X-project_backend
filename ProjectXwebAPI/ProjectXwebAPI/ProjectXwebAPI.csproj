@@ -241,6 +241,7 @@
     <Compile Include="ViewModels\ChapterStoryVM.cs" />
     <Compile Include="ViewModels\ChapterVM.cs" />
     <Compile Include="ViewModels\GenreVM.cs" />
+    <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\StorySearchVM.cs" />
     <Compile Include="ViewModels\StoryVM.cs" />
   </ItemGroup>
