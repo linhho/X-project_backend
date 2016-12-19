@@ -11,6 +11,7 @@
           </Key>
           <Property Name="AuthorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AuthorName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuthorStatus" Type="int" Nullable="false" />
           <Property Name="Slug" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Chapters">
@@ -22,6 +23,7 @@
           <Property Name="ChapterNumber" Type="int" Nullable="false" />
           <Property Name="ChapterTitle" Type="nvarchar" MaxLength="50" />
           <Property Name="ChapterContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ChapterStatus" Type="int" Nullable="false" />
           <Property Name="UploadedDate" Type="datetime" Nullable="false" />
           <Property Name="LastEditedDate" Type="datetime" />
           <Property Name="UserId" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -33,6 +35,7 @@
           </Key>
           <Property Name="GenreId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GenreName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="GenreStatus" Type="int" Nullable="false" />
           <Property Name="Slug" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Reviews">
@@ -185,6 +188,7 @@
           </Key>
           <Property Name="AuthorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AuthorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AuthorStatus" Type="Int32" Nullable="false" />
           <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Stories" Relationship="Self.fk_AuthorStories" FromRole="Authors" ToRole="Stories" />
         </EntityType>
@@ -197,6 +201,7 @@
           <Property Name="ChapterNumber" Type="Int32" Nullable="false" />
           <Property Name="ChapterTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ChapterContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ChapterStatus" Type="Int32" Nullable="false" />
           <Property Name="UploadedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastEditedDate" Type="DateTime" Precision="3" />
           <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -209,6 +214,7 @@
           </Key>
           <Property Name="GenreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GenreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GenreStatus" Type="Int32" Nullable="false" />
           <Property Name="Slug" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Stories" Relationship="Self.StoryGenre" FromRole="Genres" ToRole="Stories" />
         </EntityType>
@@ -334,6 +340,7 @@
               <MappingFragment StoreEntitySet="Authors">
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
+                <ScalarProperty Name="AuthorStatus" ColumnName="AuthorStatus" />
                 <ScalarProperty Name="Slug" ColumnName="Slug" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -346,6 +353,7 @@
                 <ScalarProperty Name="ChapterNumber" ColumnName="ChapterNumber" />
                 <ScalarProperty Name="ChapterTitle" ColumnName="ChapterTitle" />
                 <ScalarProperty Name="ChapterContent" ColumnName="ChapterContent" />
+                <ScalarProperty Name="ChapterStatus" ColumnName="ChapterStatus" />
                 <ScalarProperty Name="UploadedDate" ColumnName="UploadedDate" />
                 <ScalarProperty Name="LastEditedDate" ColumnName="LastEditedDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -358,6 +366,7 @@
               <MappingFragment StoreEntitySet="Genres">
                 <ScalarProperty Name="GenreId" ColumnName="GenreId" />
                 <ScalarProperty Name="GenreName" ColumnName="GenreName" />
+                <ScalarProperty Name="GenreStatus" ColumnName="GenreStatus" />
                 <ScalarProperty Name="Slug" ColumnName="Slug" />
               </MappingFragment>
             </EntityTypeMapping>

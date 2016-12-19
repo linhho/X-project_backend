@@ -16,6 +16,7 @@ CREATE TABLE Authors
 (
 AuthorId int IDENTITY(1,1) PRIMARY KEY,
 AuthorName nvarchar(50) NOT NULL,
+AuthorStatus int NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
@@ -23,6 +24,7 @@ CREATE TABLE Genres
 (
 GenreId int IDENTITY(1,1) PRIMARY KEY,
 GenreName nvarchar(50) NOT NULL,
+GenreStatus int NOT NULL,
 Slug nvarchar(50) NOT NULL
 )
 
@@ -57,6 +59,7 @@ StoryId int NOT NULL,
 ChapterNumber int NOT NULL,
 ChapterTitle nvarchar(50),
 ChapterContent nvarchar(MAX) NOT NULL,
+ChapterStatus int NOT NULL,
 UploadedDate datetime NOT NULL,
 LastEditedDate datetime,
 UserId nvarchar(50) NOT NULL,

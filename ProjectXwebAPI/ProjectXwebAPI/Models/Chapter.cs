@@ -19,6 +19,7 @@ namespace ProjectXwebAPI.Models
         public int ChapterNumber { get; set; }
         public string ChapterTitle { get; set; }
         public string ChapterContent { get; set; }
+        public int ChapterStatus { get; set; }
         public System.DateTime UploadedDate { get; set; }
         public Nullable<System.DateTime> LastEditedDate { get; set; }
         public string UserId { get; set; }

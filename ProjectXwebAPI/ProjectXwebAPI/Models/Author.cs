@@ -22,6 +22,7 @@ namespace ProjectXwebAPI.Models
     
         public int AuthorId { get; set; }
         public string AuthorName { get; set; }
+        public int AuthorStatus { get; set; }
         public string Slug { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
