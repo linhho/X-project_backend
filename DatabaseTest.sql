@@ -2,58 +2,67 @@
 GO
 INSERT INTO [dbo].[Authors]
            ([AuthorName]
+		   ,[AuthorStatus]
            ,[Slug])
      VALUES
-           (N'Nguyễn Nhật Ánh',N'nguyen-nhat-anh')
+           (N'Nguyễn Nhật Ánh',1,N'nguyen-nhat-anh')
 GO
 INSERT INTO [dbo].[Authors]
            ([AuthorName]
+		   ,[AuthorStatus]
            ,[Slug])
      VALUES
-           (N'Tô Hoài',N'to-hoai')
+           (N'Tô Hoài',0,N'to-hoai')
 GO
 INSERT INTO [dbo].[Authors]
            ([AuthorName]
+		   ,[AuthorStatus]
            ,[Slug])
      VALUES
-           (N'Andersen',N'Andersen')
+           (N'Andersen',0,N'Andersen')
 GO
 INSERT INTO [dbo].[Authors]
            ([AuthorName]
+		   ,[AuthorStatus]
            ,[Slug])
      VALUES
-           (N'Trần Đăng Khoa',N'tran-dang-khoa')
+           (N'Trần Đăng Khoa',1,N'tran-dang-khoa')
 GO
 INSERT INTO [dbo].[Authors]
            ([AuthorName]
+		   ,[AuthorStatus]
            ,[Slug])
      VALUES
-           (N'Nguyên Ngọc',N'nguyen-ngoc')
+           (N'Nguyên Ngọc',1,N'nguyen-ngoc')
 GO
 
 INSERT INTO [dbo].[Genres]
            ([GenreName]
+		   ,[GenreStatus]
            ,[Slug])
      VALUES
-           (N'Tiên hiệp','tien-hiep')
+           (N'Tiên hiệp',1,'tien-hiep')
 GO
 INSERT INTO [dbo].[Genres]
            ([GenreName]
+		   ,[GenreStatus]
            ,[Slug])
      VALUES
-           (N'Kiếm hiệp','kiem-hiep')
+           (N'Kiếm hiệp',1,'kiem-hiep')
 GO
 INSERT INTO [dbo].[Genres]
            ([GenreName]
+		   ,[GenreStatus]
            ,[Slug])
      VALUES
-           (N'Thiếu nhi ','thieu-nhi')
+           (N'Thiếu nhi ',0,'thieu-nhi')
 GO
 INSERT INTO [dbo].[Genres]
-           ([GenreName]
+            ([GenreName]
+		   ,[GenreStatus]
            ,[Slug])
      VALUES
-           (N'Nước ngoài','nuoc-ngoai')
+           (N'Nước ngoài',0,'nuoc-ngoai')
 GO
 
 
@@ -192,12 +201,13 @@ INSERT INTO [dbo].[Chapters]
            ,[ChapterNumber]
            ,[ChapterTitle]
            ,[ChapterContent]
+		   ,[ChapterStatus]
            ,[UploadedDate]
            ,[LastEditedDate]
            ,[UserId]
            ,[Slug])
      VALUES
-           (1,1,N'chương đầu',N'Nội dung chương I','2016-12-13','2016-12-14',1,'chuong-dau')
+           (1,1,N'chương đầu',N'Nội dung chương I',1,'2016-12-13','2016-12-14',1,'chuong-dau')
 GO
 
 INSERT INTO [dbo].[Chapters]
@@ -205,12 +215,13 @@ INSERT INTO [dbo].[Chapters]
            ,[ChapterNumber]
            ,[ChapterTitle]
            ,[ChapterContent]
+		   ,[ChapterStatus]
            ,[UploadedDate]
            ,[LastEditedDate]
            ,[UserId]
            ,[Slug])
      VALUES
-           (2,1,N'chương đầu',N'Nội dung chương I','2016-12-13','2016-12-14',2,'chuong-dau')
+           (2,1,N'chương đầu',N'Nội dung chương I',1,'2016-12-13','2016-12-14',2,'chuong-dau')
 GO
 
 INSERT INTO [dbo].[Chapters]
@@ -218,12 +229,13 @@ INSERT INTO [dbo].[Chapters]
            ,[ChapterNumber]
            ,[ChapterTitle]
            ,[ChapterContent]
+		   ,[ChapterStatus]
            ,[UploadedDate]
            ,[LastEditedDate]
            ,[UserId]
            ,[Slug])
      VALUES
-           (3,1,N'chương đầu',N'Nội dung chương I','2016-12-13','2016-12-14',3,'chuong-dau')
+           (3,1,N'chương đầu',N'Nội dung chương I',0,'2016-12-13','2016-12-14',3,'chuong-dau')
 GO
 
 INSERT INTO [dbo].[Chapters]
@@ -231,25 +243,27 @@ INSERT INTO [dbo].[Chapters]
            ,[ChapterNumber]
            ,[ChapterTitle]
            ,[ChapterContent]
+		   ,[ChapterStatus]
            ,[UploadedDate]
            ,[LastEditedDate]
            ,[UserId]
            ,[Slug])
      VALUES
-           (4,1,N'chương đầu',N'Nội dung chương I','2016-12-13','2016-12-14',4,'chuong-dau')
+           (4,1,N'chương đầu',N'Nội dung chương I',1,'2016-12-13','2016-12-14',4,'chuong-dau')
 GO
 
 INSERT INTO [dbo].[Chapters]
-           ([StoryId]
+          ([StoryId]
            ,[ChapterNumber]
            ,[ChapterTitle]
            ,[ChapterContent]
+		   ,[ChapterStatus]
            ,[UploadedDate]
            ,[LastEditedDate]
            ,[UserId]
            ,[Slug])
      VALUES
-           (5,1,N'chương đầu',N'Nội dung chương I','2016-12-13','2016-12-14',5,'chuong-dau')
+           (5,1,N'chương đầu',N'Nội dung chương I',1,'2016-12-13','2016-12-14',5,'chuong-dau')
 GO
 
 
