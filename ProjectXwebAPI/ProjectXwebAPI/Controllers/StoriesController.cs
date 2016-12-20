@@ -347,12 +347,27 @@ namespace ProjectXwebAPI.Controllers
         public IHttpActionResult GetStory(int id)
         {
             Story story = db.Stories.Find(id);
-            StoryVM storyVM = new StoryVM(story);
 
             if (story == null)
             {
                 return NotFound();
             }
+            StoryVM storyVM = new StoryVM(story);
+
+            return Ok(storyVM);
+        }
+
+        // GET: api/Stories/name/N
+        [ResponseType(typeof(StoryVM))]
+        public IHttpActionResult GetStoryByName(string slug)
+        {
+            Story story = db.Stories.SingleOrDefault(s => s.Slug.Equals(slug));
+
+            if (story == null)
+            {
+                return NotFound();
+            }
+            StoryVM storyVM = new StoryVM(story);
 
             return Ok(storyVM);
         }
@@ -476,6 +491,13 @@ namespace ProjectXwebAPI.Controllers
             story.RateCount = storyVM.RateCount;
             story.Image = storyVM.Image;
             story.Slug = storyVM.Slug;
+
+            var slugCount = db.Stories.Count(s => s.Slug.StartsWith(storyVM.Slug));
+
+            if (slugCount > 0)
+            {
+                story.Slug += slugCount;
+            }
         }
     }
 }

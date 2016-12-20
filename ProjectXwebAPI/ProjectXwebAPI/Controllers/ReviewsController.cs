@@ -140,6 +140,19 @@ namespace ProjectXwebAPI.Controllers
             return Ok(review);
         }
 
+        // GET: api/Reviews/name/N
+        [ResponseType(typeof(Review))]
+        public IHttpActionResult GetReviewByName(string slug)
+        {
+            Review review = db.Reviews.SingleOrDefault(r => r.Slug.Equals(slug));
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(review);
+        }
+
         // PUT: api/Reviews/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutReview(int id, Review review)
@@ -152,6 +165,13 @@ namespace ProjectXwebAPI.Controllers
             if (id != review.ReviewId)
             {
                 return BadRequest();
+            }
+
+            var slugCount = db.Reviews.Count(r => r.Slug.StartsWith(review.Slug));
+
+            if (slugCount > 0)
+            {
+                review.Slug += slugCount;
             }
 
             db.Entry(review).State = EntityState.Modified;
@@ -182,6 +202,13 @@ namespace ProjectXwebAPI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var slugCount = db.Reviews.Count(r => r.Slug.StartsWith(review.Slug));
+
+            if (slugCount > 0)
+            {
+                review.Slug += slugCount;
             }
 
             db.Reviews.Add(review);

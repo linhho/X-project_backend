@@ -64,11 +64,25 @@ namespace ProjectXwebAPI.Controllers
         public IHttpActionResult GetChapter(int id)
         {
             Chapter chapter = db.Chapters.Find(id);
-            ChapterVM chapterVM = new ChapterVM(chapter);
             if (chapter == null)
             {
                 return NotFound();
             }
+            ChapterVM chapterVM = new ChapterVM(chapter);
+
+            return Ok(chapterVM);
+        }
+
+        // GET: api/Chapters/name/N
+        [ResponseType(typeof(ChapterVM))]
+        public IHttpActionResult GetChapterByName(string slug)
+        {
+            Chapter chapter = db.Chapters.SingleOrDefault(c => c.Slug.Equals(slug));
+            if (chapter == null)
+            {
+                return NotFound();
+            }
+            ChapterVM chapterVM = new ChapterVM(chapter);
 
             return Ok(chapterVM);
         }
@@ -172,6 +186,13 @@ namespace ProjectXwebAPI.Controllers
             chapter.LastEditedDate = chapterVM.LastEditedDate;
             chapter.UserId = chapterVM.UserId;
             chapter.Slug = chapterVM.Slug;
+
+            var slugCount = db.Chapters.Count(c => c.Slug.StartsWith(chapterVM.Slug));
+
+            if (slugCount > 0)
+            {
+                chapter.Slug += slugCount;
+            }
         }
     }
 }

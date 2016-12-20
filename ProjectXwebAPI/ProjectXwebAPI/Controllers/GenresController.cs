@@ -38,14 +38,29 @@ namespace ProjectXwebAPI.Controllers
         public IHttpActionResult GetGenre(int id)
         {
             Genre genre = db.Genres.Find(id);
-            GenreVM genreVM = new GenreVM(genre);
 
             if (genre == null)
             {
                 return NotFound();
             }
+            GenreVM genreVM = new GenreVM(genre);
 
-            return Ok(genre);
+            return Ok(genreVM);
+        }
+
+        // GET: api/Genres/name/N
+        [ResponseType(typeof(GenreVM))]
+        public IHttpActionResult GetGenreByName(string slug)
+        {
+            Genre genre = db.Genres.SingleOrDefault(g => g.Slug.Equals(slug));
+
+            if (genre == null)
+            {
+                return NotFound();
+            }
+            GenreVM genreVM = new GenreVM(genre);
+
+            return Ok(genreVM);
         }
 
         // PUT: api/Genres/5
@@ -141,6 +156,13 @@ namespace ProjectXwebAPI.Controllers
             genre.GenreName = genreVM.GenreName;
             genre.GenreStatus = genreVM.GenreStatus;
             genre.Slug = genreVM.Slug;
+
+            var slugCount = db.Genres.Count(g => g.Slug.StartsWith(genreVM.Slug));
+
+            if (slugCount > 0)
+            {
+                genre.Slug += slugCount;
+            }
         }
     }
 }

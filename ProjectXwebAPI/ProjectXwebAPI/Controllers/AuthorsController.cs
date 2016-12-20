@@ -38,11 +38,25 @@ namespace ProjectXwebAPI.Controllers
         public IHttpActionResult GetAuthor(int id)
         {
             Author author = db.Authors.Find(id);
-            AuthorVM authorVM = new AuthorVM(author);
             if (author == null)
             {
                 return NotFound();
             }
+            AuthorVM authorVM = new AuthorVM(author);
+
+            return Ok(authorVM);
+        }
+
+        // GET: api/Authors/name/N
+        [ResponseType(typeof(AuthorVM))]
+        public IHttpActionResult GetAuthorByName(string slug)
+        {
+            Author author = db.Authors.SingleOrDefault(a => a.Slug.Equals(slug));
+            if (author == null)
+            {
+                return NotFound();
+            }
+            AuthorVM authorVM = new AuthorVM(author);
 
             return Ok(authorVM);
         }
@@ -140,6 +154,13 @@ namespace ProjectXwebAPI.Controllers
             author.AuthorName = authorVM.AuthorName;
             author.AuthorStatus = authorVM.AuthorStatus;
             author.Slug = authorVM.Slug;
+
+            var slugCount = db.Authors.Count(a => a.Slug.StartsWith(authorVM.Slug));
+
+            if (slugCount > 0)
+            {
+                author.Slug += slugCount;
+            }
         }
     }
 }
