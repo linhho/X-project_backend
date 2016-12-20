@@ -48,17 +48,19 @@ namespace ProjectXwebAPI.Controllers
         }
 
         // GET: api/Authors/name/N
-        [ResponseType(typeof(AuthorVM))]
-        public IHttpActionResult GetAuthorByName(string slug)
+        public IQueryable<AuthorVM> GetAuthorByName(string slug)
         {
-            Author author = db.Authors.SingleOrDefault(a => a.Slug.Equals(slug));
-            if (author == null)
-            {
-                return NotFound();
-            }
-            AuthorVM authorVM = new AuthorVM(author);
-
-            return Ok(authorVM);
+            IQueryable<AuthorVM> authorsVM =
+                db.Authors.Select(
+                    a =>
+                        new AuthorVM
+                        {
+                            AuthorId = a.AuthorId,
+                            AuthorName = a.AuthorName,
+                            AuthorStatus = a.AuthorStatus,
+                            Slug = a.Slug
+                        }).Where(a => a.Slug.Equals(slug));
+            return authorsVM;
         }
 
         // PUT: api/Authors/5

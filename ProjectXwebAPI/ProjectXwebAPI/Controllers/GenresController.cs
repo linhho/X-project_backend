@@ -49,18 +49,19 @@ namespace ProjectXwebAPI.Controllers
         }
 
         // GET: api/Genres/name/N
-        [ResponseType(typeof(GenreVM))]
-        public IHttpActionResult GetGenreByName(string slug)
+        public IQueryable<GenreVM> GetGenreByName(string slug)
         {
-            Genre genre = db.Genres.SingleOrDefault(g => g.Slug.Equals(slug));
-
-            if (genre == null)
-            {
-                return NotFound();
-            }
-            GenreVM genreVM = new GenreVM(genre);
-
-            return Ok(genreVM);
+            IQueryable<GenreVM> genreVMs =
+                db.Genres.Select(
+                    g =>
+                        new GenreVM
+                        {
+                            GenreId = g.GenreId,
+                            GenreName = g.GenreName,
+                            GenreStatus = g.GenreStatus,
+                            Slug = g.Slug
+                        }).Where(g => g.Slug.Equals(slug));
+            return genreVMs;
         }
 
         // PUT: api/Genres/5

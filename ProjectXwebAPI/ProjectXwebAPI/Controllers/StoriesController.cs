@@ -358,18 +358,52 @@ namespace ProjectXwebAPI.Controllers
         }
 
         // GET: api/Stories/name/N
-        [ResponseType(typeof(StoryVM))]
-        public IHttpActionResult GetStoryByName(string slug)
+        public IQueryable<StoryVM> GetStoryByName(string slug)
         {
-            Story story = db.Stories.SingleOrDefault(s => s.Slug.Equals(slug));
-
-            if (story == null)
-            {
-                return NotFound();
-            }
-            StoryVM storyVM = new StoryVM(story);
-
-            return Ok(storyVM);
+            IQueryable<StoryVM> storyVMs =
+                db.Stories.Select(
+                    s =>
+                        new StoryVM
+                        {
+                            StoryId = s.StoryId,
+                            StoryName = s.StoryName,
+                            StoryProgress = s.StoryProgress,
+                            StoryStatus = s.StoryStatus,
+                            StoryDescription = s.StoryDescription,
+                            Author =
+                                new AuthorVM
+                                {
+                                    AuthorId = s.AuthorId,
+                                    AuthorName = s.Author.AuthorName,
+                                    AuthorStatus = s.Author.AuthorStatus,
+                                    Slug = s.Author.Slug
+                                },
+                            Genres = s.Genres.Select(g =>
+                                new GenreVM
+                                {
+                                    GenreId = g.GenreId,
+                                    GenreName = g.GenreName,
+                                    GenreStatus = g.GenreStatus,
+                                    Slug = g.Slug
+                                }),
+                            CreatedDate = s.CreatedDate,
+                            LastEditedDate = s.LastEditedDate,
+                            UserId = s.UserId,
+                            Score = s.Score,
+                            RateCount = s.RateCount,
+                            Image = s.Image,
+                            Slug = s.Slug,
+                            Chapters = s.Chapters.Select(c =>
+                                new ChapterStoryVM
+                                {
+                                    ChapterId = c.ChapterId,
+                                    ChapterNumber = c.ChapterNumber,
+                                    ChapterTitle = c.ChapterTitle,
+                                    Slug = c.Slug,
+                                    StoryId = c.StoryId
+                                })
+                        }).Where(s => s.Slug.Equals(slug));
+            return storyVMs;
         }
 
         // PUT: api/Stories/5

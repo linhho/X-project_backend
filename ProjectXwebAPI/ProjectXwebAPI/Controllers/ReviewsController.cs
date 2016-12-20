@@ -141,16 +141,9 @@ namespace ProjectXwebAPI.Controllers
         }
 
         // GET: api/Reviews/name/N
-        [ResponseType(typeof(Review))]
-        public IHttpActionResult GetReviewByName(string slug)
+        public IQueryable<Review> GetReviewByName(string slug)
         {
-            Review review = db.Reviews.SingleOrDefault(r => r.Slug.Equals(slug));
-            if (review == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(review);
+            return db.Reviews.Where(r => r.Slug.Equals(slug));
         }
 
         // PUT: api/Reviews/5

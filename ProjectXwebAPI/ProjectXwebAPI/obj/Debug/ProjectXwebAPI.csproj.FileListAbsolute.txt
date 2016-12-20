@@ -124,3 +124,6 @@ C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwe
 C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\obj\Debug\ProjectXwebAPI.csprojResolveAssemblyReference.cache
 C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\obj\Debug\ProjectXwebAPI.dll
 C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\obj\Debug\ProjectXwebAPI.pdb
+C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\bin\System.Web.Cors.dll
+C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\bin\System.Web.Http.Cors.dll
+C:\Users\quanhominh\Documents\GitHub\X-project_backend\ProjectXwebAPI\ProjectXwebAPI\bin\System.Web.Http.Cors.xml

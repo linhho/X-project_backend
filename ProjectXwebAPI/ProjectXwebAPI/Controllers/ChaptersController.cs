@@ -74,17 +74,23 @@ namespace ProjectXwebAPI.Controllers
         }
 
         // GET: api/Chapters/name/N
-        [ResponseType(typeof(ChapterVM))]
-        public IHttpActionResult GetChapterByName(string slug)
+        public IQueryable<ChapterVM> GetChapterByName(string slug)
         {
-            Chapter chapter = db.Chapters.SingleOrDefault(c => c.Slug.Equals(slug));
-            if (chapter == null)
-            {
-                return NotFound();
-            }
-            ChapterVM chapterVM = new ChapterVM(chapter);
-
-            return Ok(chapterVM);
+            IQueryable<ChapterVM> chapterVMs =
+                db.Chapters.Select(c => new ChapterVM
+                {
+                    ChapterId = c.ChapterId,
+                    StoryId = c.StoryId,
+                    ChapterNumber = c.ChapterNumber,
+                    ChapterTitle = c.ChapterTitle,
+                    ChapterContent = c.ChapterContent,
+                    ChapterStatus = c.ChapterStatus,
+                    UploadedDate = c.UploadedDate,
+                    LastEditedDate = c.LastEditedDate,
+                    UserId = c.UserId,
+                    Slug = c.Slug
+                }).Where(c => c.Slug.Equals(slug));
+            return chapterVMs;
         }
 
         // PUT: api/Chapters/5
