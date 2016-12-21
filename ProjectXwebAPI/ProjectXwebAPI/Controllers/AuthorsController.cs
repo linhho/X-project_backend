@@ -115,11 +115,13 @@ namespace ProjectXwebAPI.Controllers
             db.Authors.Add(author);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = author.AuthorId }, authorVM);
+            authorVM.AuthorId = author.AuthorId;
+
+            return CreatedAtRoute("DefaultApi", new { id = authorVM.AuthorId }, authorVM);
         }
 
         // DELETE: api/Authors/5
-        [ResponseType(typeof(Author))]
+        [ResponseType(typeof(AuthorVM))]
         public IHttpActionResult DeleteAuthor(int id)
         {
             Author author = db.Authors.Find(id);
@@ -133,7 +135,9 @@ namespace ProjectXwebAPI.Controllers
             db.Entry(author).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Ok(author);
+            AuthorVM authorVM = new AuthorVM(author);
+
+            return Ok(authorVM);
         }
 
         protected override void Dispose(bool disposing)

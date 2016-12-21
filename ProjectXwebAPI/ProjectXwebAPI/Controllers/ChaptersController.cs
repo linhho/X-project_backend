@@ -150,11 +150,13 @@ namespace ProjectXwebAPI.Controllers
             db.Chapters.Add(chapter);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = chapter.ChapterId }, chapterVM);
+            chapterVM.ChapterId = chapter.ChapterId;
+
+            return CreatedAtRoute("DefaultApi", new { id = chapterVM.ChapterId }, chapterVM);
         }
 
         // DELETE: api/Chapters/5
-        [ResponseType(typeof(Chapter))]
+        [ResponseType(typeof(ChapterVM))]
         public IHttpActionResult DeleteChapter(int id)
         {
             Chapter chapter = db.Chapters.Find(id);
@@ -168,7 +170,9 @@ namespace ProjectXwebAPI.Controllers
             db.Entry(chapter).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Ok(chapter);
+            ChapterVM chapterVM = new ChapterVM(chapter);
+
+            return Ok(chapterVM);
         }
 
         protected override void Dispose(bool disposing)

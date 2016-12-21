@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
+using WebGrease.Css.Extensions;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -256,11 +257,13 @@ namespace ProjectXwebAPI.Controllers
             db.Stories.Add(story);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = story.StoryId }, storyVM);
+            storyVM.StoryId = story.StoryId;
+
+            return CreatedAtRoute("DefaultApi", new { id = storyVM.StoryId }, storyVM);
         }
 
         // DELETE: api/Stories/5
-        [ResponseType(typeof(Story))]
+        [ResponseType(typeof(StoryVM))]
         public IHttpActionResult DeleteStory(int id)
         {
             Story story = db.Stories.Find(id);
@@ -271,10 +274,13 @@ namespace ProjectXwebAPI.Controllers
 
             //db.Stories.Remove(story);
             story.StoryStatus = -1;
+            story.Chapters.ForEach(c => c.ChapterStatus = -1);
             db.Entry(story).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Ok(story);
+            StoryVM storyVM = new StoryVM(story);
+
+            return Ok(storyVM);
         }
 
         protected override void Dispose(bool disposing)

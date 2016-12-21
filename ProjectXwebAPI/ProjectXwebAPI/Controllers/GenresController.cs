@@ -116,11 +116,13 @@ namespace ProjectXwebAPI.Controllers
             db.Genres.Add(genre);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = genre.GenreId }, genre);
+            genreVM.GenreId = genre.GenreId;
+
+            return CreatedAtRoute("DefaultApi", new { id = genreVM.GenreId }, genreVM);
         }
 
         // DELETE: api/Genres/5
-        [ResponseType(typeof(Genre))]
+        [ResponseType(typeof(GenreVM))]
         public IHttpActionResult DeleteGenre(int id)
         {
             Genre genre = db.Genres.Find(id);
@@ -134,7 +136,9 @@ namespace ProjectXwebAPI.Controllers
             db.Entry(genre).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Ok(genre);
+            GenreVM genreVM = new GenreVM(genre);
+
+            return Ok(genreVM);
         }
 
         protected override void Dispose(bool disposing)
