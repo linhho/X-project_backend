@@ -27,82 +27,67 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Reviews/range/1/5
         public IQueryable<ReviewVM> GetReviewsByRange(int start, int end)
         {
-            IQueryable<ReviewVM> reviewVMs =
-                db.Reviews.Select(
-                    r =>
-                        new ReviewVM
-                        {
-                            ReviewId = r.ReviewId,
-                            ReviewTitle = r.ReviewTitle,
-                            UserId = r.UserId,
-                            Score = r.Score,
-                            RateCount = r.RateCount,
-                            Image = r.Image,
-                            Slug = r.Slug
-                        });
-
-            var q = reviewVMs.OrderByDescending(r => r.ReviewId);
+            IQueryable<Review> reviews = db.Reviews.OrderByDescending(r => r.ReviewId);
+            List<ReviewVM> reviewVMs = new List<ReviewVM>();
+            ReviewVM reviewVM;
 
             if (start < 1)
             {
                 start = 1;
             }
 
-            if (end > q.Count())
+            if (end > reviews.Count())
             {
-                end = q.Count();
+                end = reviews.Count();
             }
 
             int begin = start - 1;
 
-            return q.Skip(begin).Take(end - begin);
+            foreach (var review in reviews.Skip(begin).Take(end - begin))
+            {
+                reviewVM = new ReviewVM(review);
+                reviewVMs.Add(reviewVM);
+            }
+
+            return reviewVMs.AsQueryable();
         }
 
         // GET: api/Reviews/user/U
         public IQueryable<ReviewVM> GetReviewsByUser(string userId)
         {
             IQueryable<Review> reviews = from r in db.Reviews where r.UserId.Equals(userId) select r;
+            List<ReviewVM> reviewVMs = new List<ReviewVM>();
+            ReviewVM reviewVM;
 
-            IQueryable<ReviewVM> reviewVMs = reviews.Select(
-                r =>
-                    new ReviewVM
-                    {
-                        ReviewId = r.ReviewId,
-                        ReviewTitle = r.ReviewTitle,
-                        UserId = r.UserId,
-                        Score = r.Score,
-                        RateCount = r.RateCount,
-                        Image = r.Image,
-                        Slug = r.Slug
-                    });
-            return reviewVMs;
+            foreach (var review in reviews)
+            {
+                reviewVM = new ReviewVM(review);
+                reviewVMs.Add(reviewVM);
+            }
+
+            return reviewVMs.AsQueryable();
         }
 
         // GET: api/Reviews/rank/20
         public IQueryable<ReviewVM> GetReviewsByRank(int top)
         {
-            IQueryable<ReviewVM> reviewVMs =
-                db.Reviews.Select(
-                    r =>
-                        new ReviewVM
-                        {
-                            ReviewId = r.ReviewId,
-                            ReviewTitle = r.ReviewTitle,
-                            UserId = r.UserId,
-                            Score = r.Score,
-                            RateCount = r.RateCount,
-                            Image = r.Image,
-                            Slug = r.Slug
-                        });
+            IQueryable<Review> reviews =
+                db.Reviews.OrderByDescending(r => SqlFunctions.Exp((double) (r.Score/r.RateCount)));
+            List<ReviewVM> reviewVMs = new List<ReviewVM>();
+            ReviewVM reviewVM;
 
-            var q = reviewVMs.OrderByDescending(r => SqlFunctions.Exp((double) (r.Score/r.RateCount)));
-
-            if (top > q.Count())
+            if (top > reviews.Count())
             {
-                top = q.Count();
+                top = reviews.Count();
             }
 
-            return q.Take(top);
+            foreach (var review in reviews.Take(top))
+            {
+                reviewVM = new ReviewVM(review);
+                reviewVMs.Add(reviewVM);
+            }
+
+            return reviewVMs.AsQueryable();
         }
 
         // GET: api/Reviews/search/N
@@ -111,20 +96,16 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Review> reviews = from r in db.Reviews
                 where r.ReviewTitle.Contains(name) || r.Slug.Contains(name)
                 select r;
+            List<ReviewVM> reviewVMs = new List<ReviewVM>();
+            ReviewVM reviewVM;
 
-            IQueryable<ReviewVM> reviewVMs = reviews.Select(
-                r =>
-                    new ReviewVM
-                    {
-                        ReviewId = r.ReviewId,
-                        ReviewTitle = r.ReviewTitle,
-                        UserId = r.UserId,
-                        Score = r.Score,
-                        RateCount = r.RateCount,
-                        Image = r.Image,
-                        Slug = r.Slug
-                    });
-            return reviewVMs;
+            foreach (var review in reviews)
+            {
+                reviewVM = new ReviewVM(review);
+                reviewVMs.Add(reviewVM);
+            }
+
+            return reviewVMs.AsQueryable();
         }
 
         // GET: api/Reviews/5

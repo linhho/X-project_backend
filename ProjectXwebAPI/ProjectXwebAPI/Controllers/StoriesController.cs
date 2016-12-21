@@ -21,102 +21,44 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Stories
         public IQueryable<StoryVM> GetStories()
         {
-            IQueryable<StoryVM> storyVMs =
-                db.Stories.Select(
-                    s =>
-                        new StoryVM
-                        {
-                            StoryId = s.StoryId,
-                            StoryName = s.StoryName,
-                            StoryProgress = s.StoryProgress,
-                            StoryStatus = s.StoryStatus,
-                            StoryDescription = s.StoryDescription,
-                            Author =
-                                new AuthorVM
-                                {
-                                    AuthorId = s.AuthorId,
-                                    AuthorName = s.Author.AuthorName,
-                                    AuthorStatus = s.Author.AuthorStatus,
-                                    Slug = s.Author.Slug
-                                },
-                            Genres = s.Genres.Select(g =>
-                                new GenreVM
-                                {
-                                    GenreId = g.GenreId,
-                                    GenreName = g.GenreName,
-                                    GenreStatus = g.GenreStatus,
-                                    Slug = g.Slug
-                                }),
-                            CreatedDate = s.CreatedDate,
-                            LastEditedDate = s.LastEditedDate,
-                            UserId = s.UserId,
-                            Score = s.Score,
-                            RateCount = s.RateCount,
-                            Image = s.Image,
-                            Slug = s.Slug,
-                            Chapters = s.Chapters.Select(c =>
-                                new ChapterStoryVM
-                                {
-                                    ChapterId = c.ChapterId,
-                                    ChapterNumber = c.ChapterNumber,
-                                    ChapterTitle = c.ChapterTitle,
-                                    Slug = c.Slug,
-                                    StoryId = c.StoryId
-                                })
-                        });
-            return storyVMs;
+            List<StoryVM> storyVMs = new List<StoryVM>();
+            StoryVM storyVM;
+
+            foreach (var story in db.Stories)
+            {
+                storyVM = new StoryVM(story);
+                storyVMs.Add(storyVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/range/1/5
         public IQueryable<StorySearchVM> GetStoriesByRange(int start, int end)
         {
-            IQueryable<StorySearchVM> storyVMs =
-                db.Stories.Select(
-                    s =>
-                        new StorySearchVM
-                        {
-                            StoryId = s.StoryId,
-                            StoryName = s.StoryName,
-                            StoryProgress = s.StoryProgress,
-                            StoryStatus = s.StoryStatus,
-                            Author =
-                                new AuthorVM
-                                {
-                                    AuthorId = s.AuthorId,
-                                    AuthorName = s.Author.AuthorName,
-                                    AuthorStatus = s.Author.AuthorStatus,
-                                    Slug = s.Author.Slug
-                                },
-                            Genres = s.Genres.Select(g =>
-                                new GenreVM
-                                {
-                                    GenreId = g.GenreId,
-                                    GenreName = g.GenreName,
-                                    GenreStatus = g.GenreStatus,
-                                    Slug = g.Slug
-                                }),
-                            UserId = s.UserId,
-                            Score = s.Score,
-                            RateCount = s.RateCount,
-                            Image = s.Image,
-                            Slug = s.Slug
-                        });
-
-            var q = storyVMs.OrderByDescending(s => s.StoryId);
+            IQueryable<Story> stories = db.Stories.OrderByDescending(s => s.StoryId);
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
             if (start < 1)
             {
                 start = 1;
             }
 
-            if (end > q.Count())
+            if (end > stories.Count())
             {
-                end = q.Count();
+                end = stories.Count();
             }
 
             int begin = start - 1;
 
-            return q.Skip(begin).Take(end - begin);
+            foreach (var story in stories.Skip(begin).Take(end - begin))
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/author/A
@@ -126,38 +68,16 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Story> stories = from s in db.Stories
                 where s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)
                 select s;
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
-            IQueryable<StorySearchVM> storyVMs = stories.Select(
-                s =>
-                    new StorySearchVM
-                    {
-                        StoryId = s.StoryId,
-                        StoryName = s.StoryName,
-                        StoryProgress = s.StoryProgress,
-                        StoryStatus = s.StoryStatus,
-                        Author =
-                            new AuthorVM
-                            {
-                                AuthorId = s.AuthorId,
-                                AuthorName = s.Author.AuthorName,
-                                AuthorStatus = s.Author.AuthorStatus,
-                                Slug = s.Author.Slug
-                            },
-                        Genres = s.Genres.Select(g =>
-                            new GenreVM
-                            {
-                                GenreId = g.GenreId,
-                                GenreName = g.GenreName,
-                                GenreStatus = g.GenreStatus,
-                                Slug = g.Slug
-                            }),
-                        UserId = s.UserId,
-                        Score = s.Score,
-                        RateCount = s.RateCount,
-                        Image = s.Image,
-                        Slug = s.Slug
-                    });
-            return storyVMs;
+            foreach (var story in stories)
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/user/U
@@ -166,83 +86,37 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Story> stories = from s in db.Stories
                 where s.UserId.Equals(userId)
                 select s;
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
-            IQueryable<StorySearchVM> storyVMs = stories.Select(
-                s =>
-                    new StorySearchVM
-                    {
-                        StoryId = s.StoryId,
-                        StoryName = s.StoryName,
-                        StoryProgress = s.StoryProgress,
-                        StoryStatus = s.StoryStatus,
-                        Author =
-                            new AuthorVM
-                            {
-                                AuthorId = s.AuthorId,
-                                AuthorName = s.Author.AuthorName,
-                                AuthorStatus = s.Author.AuthorStatus,
-                                Slug = s.Author.Slug
-                            },
-                        Genres = s.Genres.Select(g =>
-                            new GenreVM
-                            {
-                                GenreId = g.GenreId,
-                                GenreName = g.GenreName,
-                                GenreStatus = g.GenreStatus,
-                                Slug = g.Slug
-                            }),
-                        UserId = s.UserId,
-                        Score = s.Score,
-                        RateCount = s.RateCount,
-                        Image = s.Image,
-                        Slug = s.Slug
-                    });
-            return storyVMs;
+            foreach (var story in stories)
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/rank/20
         public IQueryable<StorySearchVM> GetStoriesByRank(int top)
         {
-            IQueryable<StorySearchVM> storyVMs =
-                db.Stories.Select(
-                    s =>
-                        new StorySearchVM
-                        {
-                            StoryId = s.StoryId,
-                            StoryName = s.StoryName,
-                            StoryProgress = s.StoryProgress,
-                            StoryStatus = s.StoryStatus,
-                            Author =
-                                new AuthorVM
-                                {
-                                    AuthorId = s.AuthorId,
-                                    AuthorName = s.Author.AuthorName,
-                                    AuthorStatus = s.Author.AuthorStatus,
-                                    Slug = s.Author.Slug
-                                },
-                            Genres = s.Genres.Select(g =>
-                                new GenreVM
-                                {
-                                    GenreId = g.GenreId,
-                                    GenreName = g.GenreName,
-                                    GenreStatus = g.GenreStatus,
-                                    Slug = g.Slug
-                                }),
-                            UserId = s.UserId,
-                            Score = s.Score,
-                            RateCount = s.RateCount,
-                            Image = s.Image,
-                            Slug = s.Slug
-                        });
+            IQueryable<Story> stories = db.Stories.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
-            var q = storyVMs.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
-
-            if (top > q.Count())
+            if (top > stories.Count())
             {
-                top = q.Count();
+                top = stories.Count();
             }
 
-            return q.Take(top);
+            foreach (var story in stories.Take(top))
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/genre/G
@@ -252,38 +126,16 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Story> stories = from s in db.Stories
                 where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0
                 select s;
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
-            IQueryable<StorySearchVM> storyVMs = stories.Select(
-                s =>
-                    new StorySearchVM
-                    {
-                        StoryId = s.StoryId,
-                        StoryName = s.StoryName,
-                        StoryProgress = s.StoryProgress,
-                        StoryStatus = s.StoryStatus,
-                        Author =
-                            new AuthorVM
-                            {
-                                AuthorId = s.AuthorId,
-                                AuthorName = s.Author.AuthorName,
-                                AuthorStatus = s.Author.AuthorStatus,
-                                Slug = s.Author.Slug
-                            },
-                        Genres = s.Genres.Select(g =>
-                            new GenreVM
-                            {
-                                GenreId = g.GenreId,
-                                GenreName = g.GenreName,
-                                GenreStatus = g.GenreStatus,
-                                Slug = g.Slug
-                            }),
-                        UserId = s.UserId,
-                        Score = s.Score,
-                        RateCount = s.RateCount,
-                        Image = s.Image,
-                        Slug = s.Slug
-                    });
-            return storyVMs;
+            foreach (var story in stories)
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/search/S
@@ -292,38 +144,16 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Story> stories = from s in db.Stories
                 where s.StoryName.Contains(name) || s.Slug.Contains(name)
                 select s;
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
 
-            IQueryable<StorySearchVM> storyVMs = stories.Select(
-                s =>
-                    new StorySearchVM
-                    {
-                        StoryId = s.StoryId,
-                        StoryName = s.StoryName,
-                        StoryProgress = s.StoryProgress,
-                        StoryStatus = s.StoryStatus,
-                        Author =
-                            new AuthorVM
-                            {
-                                AuthorId = s.AuthorId,
-                                AuthorName = s.Author.AuthorName,
-                                AuthorStatus = s.Author.AuthorStatus,
-                                Slug = s.Author.Slug
-                            },
-                        Genres = s.Genres.Select(g =>
-                            new GenreVM
-                            {
-                                GenreId = g.GenreId,
-                                GenreName = g.GenreName,
-                                GenreStatus = g.GenreStatus,
-                                Slug = g.Slug
-                            }),
-                        UserId = s.UserId,
-                        Score = s.Score,
-                        RateCount = s.RateCount,
-                        Image = s.Image,
-                        Slug = s.Slug
-                    });
-            return storyVMs;
+            foreach (var story in stories)
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // GET: api/Stories/users/10
@@ -360,50 +190,17 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Stories/name/N
         public IQueryable<StoryVM> GetStoryByName(string slug)
         {
-            IQueryable<StoryVM> storyVMs =
-                db.Stories.Select(
-                    s =>
-                        new StoryVM
-                        {
-                            StoryId = s.StoryId,
-                            StoryName = s.StoryName,
-                            StoryProgress = s.StoryProgress,
-                            StoryStatus = s.StoryStatus,
-                            StoryDescription = s.StoryDescription,
-                            Author =
-                                new AuthorVM
-                                {
-                                    AuthorId = s.AuthorId,
-                                    AuthorName = s.Author.AuthorName,
-                                    AuthorStatus = s.Author.AuthorStatus,
-                                    Slug = s.Author.Slug
-                                },
-                            Genres = s.Genres.Select(g =>
-                                new GenreVM
-                                {
-                                    GenreId = g.GenreId,
-                                    GenreName = g.GenreName,
-                                    GenreStatus = g.GenreStatus,
-                                    Slug = g.Slug
-                                }),
-                            CreatedDate = s.CreatedDate,
-                            LastEditedDate = s.LastEditedDate,
-                            UserId = s.UserId,
-                            Score = s.Score,
-                            RateCount = s.RateCount,
-                            Image = s.Image,
-                            Slug = s.Slug,
-                            Chapters = s.Chapters.Select(c =>
-                                new ChapterStoryVM
-                                {
-                                    ChapterId = c.ChapterId,
-                                    ChapterNumber = c.ChapterNumber,
-                                    ChapterTitle = c.ChapterTitle,
-                                    Slug = c.Slug,
-                                    StoryId = c.StoryId
-                                })
-                        }).Where(s => s.Slug.Equals(slug));
-            return storyVMs;
+            IQueryable<Story> stories = db.Stories.Where(s => s.Slug.Equals(slug));
+            List<StoryVM> storyVMs = new List<StoryVM>();
+            StoryVM storyVM;
+
+            foreach (var story in stories)
+            {
+                storyVM = new StoryVM(story);
+                storyVMs.Add(storyVM);
+            }
+
+            return storyVMs.AsQueryable();
         }
 
         // PUT: api/Stories/5

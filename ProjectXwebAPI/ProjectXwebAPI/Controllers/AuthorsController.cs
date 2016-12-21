@@ -20,17 +20,16 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Authors
         public IQueryable<AuthorVM> GetAuthors()
         {
-            IQueryable<AuthorVM> authorsVM =
-                db.Authors.Select(
-                    a =>
-                        new AuthorVM
-                        {
-                            AuthorId = a.AuthorId,
-                            AuthorName = a.AuthorName,
-                            AuthorStatus = a.AuthorStatus,
-                            Slug = a.Slug
-                        });
-            return authorsVM;
+            List<AuthorVM> authorsVM = new List<AuthorVM>();
+            AuthorVM authorVM;
+
+            foreach (var author in db.Authors)
+            {
+                authorVM = new AuthorVM(author);
+                authorsVM.Add(authorVM);
+            }
+
+            return authorsVM.AsQueryable();
         }
 
         // GET: api/Authors/5
@@ -50,17 +49,17 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Authors/name/N
         public IQueryable<AuthorVM> GetAuthorByName(string slug)
         {
-            IQueryable<AuthorVM> authorsVM =
-                db.Authors.Select(
-                    a =>
-                        new AuthorVM
-                        {
-                            AuthorId = a.AuthorId,
-                            AuthorName = a.AuthorName,
-                            AuthorStatus = a.AuthorStatus,
-                            Slug = a.Slug
-                        }).Where(a => a.Slug.Equals(slug));
-            return authorsVM;
+            IQueryable<Author> authors = db.Authors.Where(a => a.Slug.Equals(slug));
+            List<AuthorVM> authorsVM = new List<AuthorVM>();
+            AuthorVM authorVM;
+
+            foreach (var author in authors)
+            {
+                authorVM = new AuthorVM(author);
+                authorsVM.Add(authorVM);
+            }
+
+            return authorsVM.AsQueryable();
         }
 
         // PUT: api/Authors/5

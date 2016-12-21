@@ -20,21 +20,16 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Chapters
         public IQueryable<ChapterVM> GetChapters()
         {
-            IQueryable<ChapterVM> chapterVMs =
-                db.Chapters.Select(c => new ChapterVM
-                {
-                    ChapterId = c.ChapterId,
-                    StoryId = c.StoryId,
-                    ChapterNumber = c.ChapterNumber,
-                    ChapterTitle = c.ChapterTitle,
-                    ChapterContent = c.ChapterContent,
-                    ChapterStatus = c.ChapterStatus,
-                    UploadedDate = c.UploadedDate,
-                    LastEditedDate = c.LastEditedDate,
-                    UserId = c.UserId,
-                    Slug = c.Slug
-                });
-            return chapterVMs;
+            List<ChapterVM> chapterVMs = new List<ChapterVM>();
+            ChapterVM chapterVM;
+
+            foreach (var chapter in db.Chapters)
+            {
+                chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
         }
 
         // GET: api/Chapters/story/1
@@ -42,21 +37,16 @@ namespace ProjectXwebAPI.Controllers
         public IQueryable<ChapterVM> GetChaptersByStory(int id)
         {
             IQueryable<Chapter> chapters = from c in db.Chapters where c.StoryId == id select c;
+            List<ChapterVM> chapterVMs = new List<ChapterVM>();
+            ChapterVM chapterVM;
 
-            IQueryable<ChapterVM> chapterVMs = chapters.Select(c => new ChapterVM
+            foreach (var chapter in chapters)
             {
-                ChapterId = c.ChapterId,
-                StoryId = c.StoryId,
-                ChapterNumber = c.ChapterNumber,
-                ChapterTitle = c.ChapterTitle,
-                ChapterContent = c.ChapterContent,
-                ChapterStatus = c.ChapterStatus,
-                UploadedDate = c.UploadedDate,
-                LastEditedDate = c.LastEditedDate,
-                UserId = c.UserId,
-                Slug = c.Slug
-            });
-            return chapterVMs;
+                chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
         }
 
         // GET: api/Chapters/5
@@ -76,21 +66,35 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Chapters/name/N
         public IQueryable<ChapterVM> GetChapterByName(string slug)
         {
-            IQueryable<ChapterVM> chapterVMs =
-                db.Chapters.Select(c => new ChapterVM
-                {
-                    ChapterId = c.ChapterId,
-                    StoryId = c.StoryId,
-                    ChapterNumber = c.ChapterNumber,
-                    ChapterTitle = c.ChapterTitle,
-                    ChapterContent = c.ChapterContent,
-                    ChapterStatus = c.ChapterStatus,
-                    UploadedDate = c.UploadedDate,
-                    LastEditedDate = c.LastEditedDate,
-                    UserId = c.UserId,
-                    Slug = c.Slug
-                }).Where(c => c.Slug.Equals(slug));
-            return chapterVMs;
+            IQueryable<Chapter> chapters = db.Chapters.Where(c => c.Slug.Equals(slug));
+            List<ChapterVM> chapterVMs = new List<ChapterVM>();
+            ChapterVM chapterVM;
+
+            foreach (var chapter in chapters)
+            {
+                chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
+        }
+
+        // GET: api/Chapters/S/1
+        [Route("api/Chapters/{story}/{number}")]
+        public IQueryable<ChapterVM> GetChapterByNumber(string story, int number)
+        {
+            IQueryable<Chapter> chapters =
+                db.Chapters.Where(c => c.Story.Slug.Equals(story) && c.ChapterNumber == number);
+            List<ChapterVM> chapterVMs = new List<ChapterVM>();
+            ChapterVM chapterVM;
+
+            foreach (var chapter in chapters)
+            {
+                chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
         }
 
         // PUT: api/Chapters/5

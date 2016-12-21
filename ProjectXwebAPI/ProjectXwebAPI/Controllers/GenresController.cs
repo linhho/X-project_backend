@@ -20,17 +20,16 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Genres
         public IQueryable<GenreVM> GetGenres()
         {
-            IQueryable<GenreVM> genreVMs =
-                db.Genres.Select(
-                    g =>
-                        new GenreVM
-                        {
-                            GenreId = g.GenreId,
-                            GenreName = g.GenreName,
-                            GenreStatus = g.GenreStatus,
-                            Slug = g.Slug
-                        });
-            return genreVMs;
+            List<GenreVM> genreVMs = new List<GenreVM>();
+            GenreVM genreVM;
+
+            foreach (var genre in db.Genres)
+            {
+                genreVM = new GenreVM(genre);
+                genreVMs.Add(genreVM);
+            }
+
+            return genreVMs.AsQueryable();
         }
 
         // GET: api/Genres/5
@@ -51,17 +50,17 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Genres/name/N
         public IQueryable<GenreVM> GetGenreByName(string slug)
         {
-            IQueryable<GenreVM> genreVMs =
-                db.Genres.Select(
-                    g =>
-                        new GenreVM
-                        {
-                            GenreId = g.GenreId,
-                            GenreName = g.GenreName,
-                            GenreStatus = g.GenreStatus,
-                            Slug = g.Slug
-                        }).Where(g => g.Slug.Equals(slug));
-            return genreVMs;
+            IQueryable<Genre> genres = db.Genres.Where(g => g.Slug.Equals(slug));
+            List<GenreVM> genreVMs = new List<GenreVM>();
+            GenreVM genreVM;
+
+            foreach (var genre in genres)
+            {
+                genreVM = new GenreVM(genre);
+                genreVMs.Add(genreVM);
+            }
+
+            return genreVMs.AsQueryable();
         }
 
         // PUT: api/Genres/5
