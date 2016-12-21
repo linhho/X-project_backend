@@ -51,7 +51,7 @@ namespace ProjectXwebAPI.Controllers
 
         // GET: api/Chapters/search/S/N
         [Route("api/Chapters/search/{story}/{keyword}")]
-        public IQueryable<ChapterVM> GetChaptersBySearch(string story, string keyword)
+        public IQueryable<ChapterStoryVM> GetChaptersBySearch(string story, string keyword)
         {
             string name = keyword;
             int number;
@@ -64,12 +64,12 @@ namespace ProjectXwebAPI.Controllers
             IQueryable<Chapter> chapters =
                 db.Chapters.Where(
                     c => c.Story.Slug.Equals(story) && (c.ChapterTitle.Contains(name) || c.ChapterNumber == number));
-            List<ChapterVM> chapterVMs = new List<ChapterVM>();
-            ChapterVM chapterVM;
+            List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();
+            ChapterStoryVM chapterVM;
 
             foreach (var chapter in chapters)
             {
-                chapterVM = new ChapterVM(chapter);
+                chapterVM = new ChapterStoryVM(chapter);
                 chapterVMs.Add(chapterVM);
             }
 
