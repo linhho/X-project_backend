@@ -32,17 +32,76 @@ namespace ProjectXwebAPI.Controllers
             return chapterVMs.AsQueryable();
         }
 
-        // GET: api/Chapters/story/1
-        [Route("api/Chapters/story/{id}")]
-        public IQueryable<ChapterVM> GetChaptersByStory(int id)
+        // GET: api/Chapters/story/S
+        [Route("api/Chapters/story/{slug}")]
+        public IQueryable<ChapterVM> GetChaptersByStory(string slug)
         {
-            IQueryable<Chapter> chapters = from c in db.Chapters where c.StoryId == id select c;
+            IQueryable<Chapter> chapters = from c in db.Chapters where c.Story.Slug.Equals(slug) select c;
             List<ChapterVM> chapterVMs = new List<ChapterVM>();
             ChapterVM chapterVM;
 
             foreach (var chapter in chapters)
             {
                 chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
+        }
+
+        // GET: api/Chapters/search/S/N
+        [Route("api/Chapters/search/{story}/{keyword}")]
+        public IQueryable<ChapterVM> GetChaptersBySearch(string story, string keyword)
+        {
+            string name = keyword;
+            int number;
+            int.TryParse(keyword, out number);
+            string[] keywords = keyword.Split(' ');
+            if (keywords.Length > 0)
+            {
+                int.TryParse(keywords[keywords.Length - 1], out number);
+            }
+            IQueryable<Chapter> chapters =
+                db.Chapters.Where(
+                    c => c.Story.Slug.Equals(story) && (c.ChapterTitle.Contains(name) || c.ChapterNumber == number));
+            List<ChapterVM> chapterVMs = new List<ChapterVM>();
+            ChapterVM chapterVM;
+
+            foreach (var chapter in chapters)
+            {
+                chapterVM = new ChapterVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
+        }
+
+        // GET: api/Chapters/range/S/1/10
+        [Route("api/Chapters/range/{slug}/{start}/{end}")]
+        public IQueryable<ChapterStoryVM> GetChaptersByRange(string slug, int start, int end)
+        {
+            IQueryable<Chapter> chapters = from c in db.Chapters
+                where c.Story.Slug.Equals(slug)
+                orderby c.ChapterNumber
+                select c;
+            List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();
+            ChapterStoryVM chapterVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > chapters.Count())
+            {
+                end = chapters.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var chapter in chapters.Skip(begin).Take(end - begin))
+            {
+                chapterVM = new ChapterStoryVM(chapter);
                 chapterVMs.Add(chapterVM);
             }
 
@@ -61,22 +120,6 @@ namespace ProjectXwebAPI.Controllers
             ChapterVM chapterVM = new ChapterVM(chapter);
 
             return Ok(chapterVM);
-        }
-
-        // GET: api/Chapters/name/N
-        public IQueryable<ChapterVM> GetChapterByName(string slug)
-        {
-            IQueryable<Chapter> chapters = db.Chapters.Where(c => c.Slug.Equals(slug));
-            List<ChapterVM> chapterVMs = new List<ChapterVM>();
-            ChapterVM chapterVM;
-
-            foreach (var chapter in chapters)
-            {
-                chapterVM = new ChapterVM(chapter);
-                chapterVMs.Add(chapterVM);
-            }
-
-            return chapterVMs.AsQueryable();
         }
 
         // GET: api/Chapters/S/1
