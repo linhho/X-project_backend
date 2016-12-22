@@ -26,7 +26,7 @@ namespace ProjectXwebAPI
 
             config.Routes.MapHttpRoute(
                 name: "UserApi",
-                routeTemplate: "api/{controller}/user/{userId}"
+                routeTemplate: "api/{controller}/user/{userId}/{start}/{end}"
             );
 
             config.Routes.MapHttpRoute(
@@ -36,12 +36,17 @@ namespace ProjectXwebAPI
 
             config.Routes.MapHttpRoute(
                 name: "SearchApi",
-                routeTemplate: "api/{controller}/search/{name}"
+                routeTemplate: "api/{controller}/search/{name}/{start}/{end}"
             );
 
             config.Routes.MapHttpRoute(
                 name: "NameApi",
                 routeTemplate: "api/{controller}/name/{slug}"
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "StatusApi",
+                routeTemplate: "api/{controller}/status/{start}/{end}"
             );
 
             config.Routes.MapHttpRoute(

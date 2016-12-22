@@ -27,7 +27,10 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Reviews/range/1/5
         public IQueryable<ReviewVM> GetReviewsByRange(int start, int end)
         {
-            IQueryable<Review> reviews = db.Reviews.OrderByDescending(r => r.ReviewId);
+            IQueryable<Review> reviews = from r in db.Reviews
+                where r.ReviewStatus == 1
+                orderby r.ReviewId descending
+                select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
@@ -52,14 +55,28 @@ namespace ProjectXwebAPI.Controllers
             return reviewVMs.AsQueryable();
         }
 
-        // GET: api/Reviews/user/U
-        public IQueryable<ReviewVM> GetReviewsByUser(string userId)
+        // GET: api/Reviews/user/U/1/5
+        public IQueryable<ReviewVM> GetReviewsByUser(string userId, int start, int end)
         {
-            IQueryable<Review> reviews = from r in db.Reviews where r.UserId.Equals(userId) select r;
+            IQueryable<Review> reviews = from r in db.Reviews
+                where r.UserId.Equals(userId) && r.ReviewStatus == 1
+                select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            foreach (var review in reviews)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > reviews.Count())
+            {
+                end = reviews.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var review in reviews.Skip(begin).Take(end - begin))
             {
                 reviewVM = new ReviewVM(review);
                 reviewVMs.Add(reviewVM);
@@ -71,8 +88,10 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Reviews/rank/20
         public IQueryable<ReviewVM> GetReviewsByRank(int top)
         {
-            IQueryable<Review> reviews =
-                db.Reviews.OrderByDescending(r => SqlFunctions.Exp((double) (r.Score/r.RateCount)));
+            IQueryable<Review> reviews = from r in db.Reviews
+                where r.ReviewStatus == 1
+                orderby SqlFunctions.Exp((double) (r.Score/r.RateCount)) descending
+                select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
@@ -90,16 +109,58 @@ namespace ProjectXwebAPI.Controllers
             return reviewVMs.AsQueryable();
         }
 
-        // GET: api/Reviews/search/N
-        public IQueryable<ReviewVM> GetReviewsByName(string name)
+        // GET: api/Reviews/search/N/1/5
+        public IQueryable<ReviewVM> GetReviewsByName(string name, int start, int end)
         {
             IQueryable<Review> reviews = from r in db.Reviews
-                where r.ReviewTitle.Contains(name) || r.Slug.Contains(name)
+                where (r.ReviewTitle.Contains(name) || r.Slug.Contains(name)) && r.ReviewStatus == 1
                 select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            foreach (var review in reviews)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > reviews.Count())
+            {
+                end = reviews.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var review in reviews.Skip(begin).Take(end - begin))
+            {
+                reviewVM = new ReviewVM(review);
+                reviewVMs.Add(reviewVM);
+            }
+
+            return reviewVMs.AsQueryable();
+        }
+
+        // GET: api/Reviews/status/1/5
+        public IQueryable<ReviewVM> GetReviewsByStatus(int start, int end)
+        {
+            IQueryable<Review> reviews = from r in db.Reviews
+                where r.ReviewStatus == 0
+                select r;
+            List<ReviewVM> reviewVMs = new List<ReviewVM>();
+            ReviewVM reviewVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > reviews.Count())
+            {
+                end = reviews.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var review in reviews.Skip(begin).Take(end - begin))
             {
                 reviewVM = new ReviewVM(review);
                 reviewVMs.Add(reviewVM);

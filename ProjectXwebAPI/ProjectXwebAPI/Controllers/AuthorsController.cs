@@ -32,6 +32,34 @@ namespace ProjectXwebAPI.Controllers
             return authorsVM.AsQueryable();
         }
 
+        // GET: api/Authors/status/1/5
+        public IQueryable<AuthorVM> GetAuthorsByStatus(int start, int end)
+        {
+            IQueryable<Author> authors = db.Authors.Where(a => a.AuthorStatus == 0);
+            List<AuthorVM> authorsVM = new List<AuthorVM>();
+            AuthorVM authorVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > authors.Count())
+            {
+                end = authors.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var author in authors.Skip(begin).Take(end - begin))
+            {
+                authorVM = new AuthorVM(author);
+                authorsVM.Add(authorVM);
+            }
+
+            return authorsVM.AsQueryable();
+        }
+
         // GET: api/Authors/5
         [ResponseType(typeof(AuthorVM))]
         public IHttpActionResult GetAuthor(int id)

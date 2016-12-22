@@ -32,6 +32,34 @@ namespace ProjectXwebAPI.Controllers
             return genreVMs.AsQueryable();
         }
 
+        // GET: api/Genres/status/1/5
+        public IQueryable<GenreVM> GetGenresByStatus(int start, int end)
+        {
+            IQueryable<Genre> genres = db.Genres.Where(g => g.GenreStatus == 0);
+            List<GenreVM> genreVMs = new List<GenreVM>();
+            GenreVM genreVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > genres.Count())
+            {
+                end = genres.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var genre in genres.Skip(begin).Take(end - begin))
+            {
+                genreVM = new GenreVM(genre);
+                genreVMs.Add(genreVM);
+            }
+
+            return genreVMs.AsQueryable();
+        }
+
         // GET: api/Genres/5
         [ResponseType(typeof(GenreVM))]
         public IHttpActionResult GetGenre(int id)

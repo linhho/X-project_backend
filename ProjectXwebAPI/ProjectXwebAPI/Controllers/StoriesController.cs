@@ -37,7 +37,10 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Stories/range/1/5
         public IQueryable<StorySearchVM> GetStoriesByRange(int start, int end)
         {
-            IQueryable<Story> stories = db.Stories.OrderByDescending(s => s.StoryId);
+            IQueryable<Story> stories = from s in db.Stories
+                where s.StoryStatus == 1
+                orderby s.StoryId descending
+                select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
@@ -62,17 +65,29 @@ namespace ProjectXwebAPI.Controllers
             return storyVMs.AsQueryable();
         }
 
-        // GET: api/Stories/author/A
-        [Route("api/Stories/author/{name}", Name = "AuthorApi")]
-        public IQueryable<StorySearchVM> GetStoriesByAuthor(string name)
+        // GET: api/Stories/author/A/1/5
+        [Route("api/Stories/author/{name}/{start}/{end}", Name = "AuthorApi")]
+        public IQueryable<StorySearchVM> GetStoriesByAuthor(string name, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)
+                where (s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)) && s.StoryStatus == 1
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            foreach (var story in stories)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > stories.Count())
+            {
+                end = stories.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var story in stories.Skip(begin).Take(end - begin))
             {
                 storySearchVM = new StorySearchVM(story);
                 storyVMs.Add(storySearchVM);
@@ -81,16 +96,28 @@ namespace ProjectXwebAPI.Controllers
             return storyVMs.AsQueryable();
         }
 
-        // GET: api/Stories/user/U
-        public IQueryable<StorySearchVM> GetStoriesByUser(string userId)
+        // GET: api/Stories/user/U/1/5
+        public IQueryable<StorySearchVM> GetStoriesByUser(string userId, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.UserId.Equals(userId)
+                where s.UserId.Equals(userId) && s.StoryStatus == 1
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            foreach (var story in stories)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > stories.Count())
+            {
+                end = stories.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var story in stories.Skip(begin).Take(end - begin))
             {
                 storySearchVM = new StorySearchVM(story);
                 storyVMs.Add(storySearchVM);
@@ -102,7 +129,10 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Stories/rank/20
         public IQueryable<StorySearchVM> GetStoriesByRank(int top)
         {
-            IQueryable<Story> stories = db.Stories.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
+            IQueryable<Story> stories = from s in db.Stories
+                where s.StoryStatus == 1
+                orderby SqlFunctions.Exp((double) s.Score/s.RateCount) descending
+                select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
@@ -120,17 +150,29 @@ namespace ProjectXwebAPI.Controllers
             return storyVMs.AsQueryable();
         }
 
-        // GET: api/Stories/genre/G
-        [Route("api/Stories/genre/{name}", Name = "GenreApi")]
-        public IQueryable<StorySearchVM> GetStoriesByGenre(string name)
+        // GET: api/Stories/genre/G/1/5
+        [Route("api/Stories/genre/{name}/{start}/{end}", Name = "GenreApi")]
+        public IQueryable<StorySearchVM> GetStoriesByGenre(string name, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0
+                where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0 && s.StoryStatus == 1
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            foreach (var story in stories)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > stories.Count())
+            {
+                end = stories.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var story in stories.Skip(begin).Take(end - begin))
             {
                 storySearchVM = new StorySearchVM(story);
                 storyVMs.Add(storySearchVM);
@@ -139,16 +181,58 @@ namespace ProjectXwebAPI.Controllers
             return storyVMs.AsQueryable();
         }
 
-        // GET: api/Stories/search/S
-        public IQueryable<StorySearchVM> GetStoriesByName(string name)
+        // GET: api/Stories/search/S/1/5
+        public IQueryable<StorySearchVM> GetStoriesByName(string name, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.StoryName.Contains(name) || s.Slug.Contains(name)
+                where (s.StoryName.Contains(name) || s.Slug.Contains(name)) && s.StoryStatus == 1
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            foreach (var story in stories)
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > stories.Count())
+            {
+                end = stories.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var story in stories.Skip(begin).Take(end - begin))
+            {
+                storySearchVM = new StorySearchVM(story);
+                storyVMs.Add(storySearchVM);
+            }
+
+            return storyVMs.AsQueryable();
+        }
+
+        // GET: api/Stories/status/1/5
+        public IQueryable<StorySearchVM> GetStoriesByStatus(int start, int end)
+        {
+            IQueryable<Story> stories = from s in db.Stories
+                where s.StoryStatus == 0
+                select s;
+            List<StorySearchVM> storyVMs = new List<StorySearchVM>();
+            StorySearchVM storySearchVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > stories.Count())
+            {
+                end = stories.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var story in stories.Skip(begin).Take(end - begin))
             {
                 storySearchVM = new StorySearchVM(story);
                 storyVMs.Add(storySearchVM);

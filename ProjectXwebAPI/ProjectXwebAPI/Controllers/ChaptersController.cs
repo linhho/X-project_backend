@@ -108,6 +108,38 @@ namespace ProjectXwebAPI.Controllers
             return chapterVMs.AsQueryable();
         }
 
+        // GET: api/Chapters/status/S/1/10
+        [Route("api/Chapters/status/{slug}/{start}/{end}")]
+        public IQueryable<ChapterStoryVM> GetChaptersByStatus(string slug, int start, int end)
+        {
+            IQueryable<Chapter> chapters = from c in db.Chapters
+                where c.Story.Slug.Equals(slug) && c.ChapterStatus == 0
+                orderby c.ChapterNumber
+                select c;
+            List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();
+            ChapterStoryVM chapterVM;
+
+            if (start < 1)
+            {
+                start = 1;
+            }
+
+            if (end > chapters.Count())
+            {
+                end = chapters.Count();
+            }
+
+            int begin = start - 1;
+
+            foreach (var chapter in chapters.Skip(begin).Take(end - begin))
+            {
+                chapterVM = new ChapterStoryVM(chapter);
+                chapterVMs.Add(chapterVM);
+            }
+
+            return chapterVMs.AsQueryable();
+        }
+
         // GET: api/Chapters/5
         [ResponseType(typeof(ChapterVM))]
         public IHttpActionResult GetChapter(int id)

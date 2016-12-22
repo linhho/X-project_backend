@@ -61,17 +61,17 @@ namespace ProjectXwebAPI.ViewModels
             this.Image = story.Image;
             this.Slug = story.Slug;
 
-            this.Chapters =
-                story.Chapters.Select(
-                    c =>
-                        new ChapterStoryVM
-                        {
-                            ChapterId = c.ChapterId,
-                            ChapterNumber = c.ChapterNumber,
-                            ChapterTitle = c.ChapterTitle,
-                            Slug = c.Slug,
-                            StoryId = c.StoryId
-                        });
+            this.Chapters = from c in story.Chapters
+                orderby c.ChapterNumber
+                select
+                new ChapterStoryVM
+                {
+                    ChapterId = c.ChapterId,
+                    ChapterNumber = c.ChapterNumber,
+                    ChapterTitle = c.ChapterTitle,
+                    Slug = c.Slug,
+                    StoryId = c.StoryId
+                };
         }
     }
 }
