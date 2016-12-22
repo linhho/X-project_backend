@@ -24,6 +24,16 @@ namespace ProjectXwebAPI.ViewModels
 
         public ChapterVM(Chapter chapter)
         {
+            ConvertChapter(chapter);
+        }
+
+        public void Update(Chapter chapter)
+        {
+            ConvertChapter(chapter);
+        }
+
+        private void ConvertChapter(Chapter chapter)
+        {
             this.ChapterId = chapter.ChapterId;
             this.StoryId = chapter.StoryId;
             this.ChapterNumber = chapter.ChapterNumber;

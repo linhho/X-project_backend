@@ -12,6 +12,16 @@ namespace ProjectXwebAPI.ViewModels
 
         public GenreVM(Genre genre)
         {
+            ConvertGenre(genre);
+        }
+
+        public void Update(Genre genre)
+        {
+            ConvertGenre(genre);
+        }
+
+        private void ConvertGenre(Genre genre)
+        {
             this.GenreId = genre.GenreId;
             this.GenreName = genre.GenreName;
             this.GenreStatus = genre.GenreStatus;

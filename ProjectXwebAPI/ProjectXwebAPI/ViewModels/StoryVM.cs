@@ -29,6 +29,16 @@ namespace ProjectXwebAPI.ViewModels
 
         public StoryVM(Story story)
         {
+            ConvertStory(story);
+        }
+
+        public void Update(Story story)
+        {
+            ConvertStory(story);
+        }
+
+        private void ConvertStory(Story story)
+        {
             this.StoryId = story.StoryId;
             this.StoryName = story.StoryName;
             this.StoryProgress = story.StoryProgress;

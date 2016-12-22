@@ -17,6 +17,16 @@ namespace ProjectXwebAPI.ViewModels
 
         public AuthorVM(Author author)
         {
+            ConvertAuthor(author);
+        }
+
+        public void Update(Author author)
+        {
+            ConvertAuthor(author);
+        }
+
+        private void ConvertAuthor(Author author)
+        {
             this.AuthorId = author.AuthorId;
             this.AuthorName = author.AuthorName;
             this.AuthorStatus = author.AuthorStatus;

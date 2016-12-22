@@ -175,7 +175,9 @@ namespace ProjectXwebAPI.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            chapterVM.Update(chapter);
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // POST: api/Chapters
@@ -193,7 +195,7 @@ namespace ProjectXwebAPI.Controllers
             db.Chapters.Add(chapter);
             db.SaveChanges();
 
-            chapterVM.ChapterId = chapter.ChapterId;
+            chapterVM.Update(chapter);
 
             return CreatedAtRoute("DefaultApi", new { id = chapterVM.ChapterId }, chapterVM);
         }

@@ -97,7 +97,9 @@ namespace ProjectXwebAPI.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            authorVM.Update(author);
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // POST: api/Authors
@@ -115,7 +117,7 @@ namespace ProjectXwebAPI.Controllers
             db.Authors.Add(author);
             db.SaveChanges();
 
-            authorVM.AuthorId = author.AuthorId;
+            authorVM.Update(author);
 
             return CreatedAtRoute("DefaultApi", new { id = authorVM.AuthorId }, authorVM);
         }

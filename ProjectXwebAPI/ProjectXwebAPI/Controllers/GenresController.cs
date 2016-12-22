@@ -98,7 +98,9 @@ namespace ProjectXwebAPI.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            genreVM.Update(genre);
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // POST: api/Genres
@@ -116,7 +118,7 @@ namespace ProjectXwebAPI.Controllers
             db.Genres.Add(genre);
             db.SaveChanges();
 
-            genreVM.GenreId = genre.GenreId;
+            genreVM.Update(genre);
 
             return CreatedAtRoute("DefaultApi", new { id = genreVM.GenreId }, genreVM);
         }

@@ -239,7 +239,9 @@ namespace ProjectXwebAPI.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            storyVM.Update(story);
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // POST: api/Stories
@@ -257,7 +259,7 @@ namespace ProjectXwebAPI.Controllers
             db.Stories.Add(story);
             db.SaveChanges();
 
-            storyVM.StoryId = story.StoryId;
+            storyVM.Update(story);
 
             return CreatedAtRoute("DefaultApi", new { id = storyVM.StoryId }, storyVM);
         }
