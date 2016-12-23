@@ -7,6 +7,7 @@ using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
@@ -44,14 +45,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -76,14 +80,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -107,14 +114,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -133,7 +143,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Story> stories = from s in db.Stories
                 where s.StoryStatus == 1
-                orderby SqlFunctions.Exp((double) s.Score/s.RateCount) descending
+                orderby SqlFunctions.Exp(s.RateCount == 0 ? 0 : (double) s.Score/s.RateCount) descending
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -163,14 +173,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -194,14 +207,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -225,14 +241,17 @@ namespace ProjectXwebAPI.Controllers
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
 
-            if (start < 1)
+            int total = stories.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > stories.Count())
+            if (end > total)
             {
-                end = stories.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -257,7 +276,7 @@ namespace ProjectXwebAPI.Controllers
             foreach (var story in db.Stories)
             {
                 userId = story.UserId;
-                rating = story.Score/story.RateCount;
+                rating = story.RateCount == 0 ? 0 : story.Score/story.RateCount;
 
                 if (users.ContainsKey(userId))
                 {
@@ -311,7 +330,7 @@ namespace ProjectXwebAPI.Controllers
 
         // PUT: api/Stories/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutStory(int id, StoryVM storyVM)
+        public async Task<IHttpActionResult> PutStory(int id, StoryVM storyVM)
         {
             if (!ModelState.IsValid)
             {
@@ -325,12 +344,18 @@ namespace ProjectXwebAPI.Controllers
 
             Story story = db.Stories.Find(id);
             ConvertStoryVM(ref story, storyVM);
+            foreach (var genreVM in storyVM.Genres)
+            {
+                Genre genre = await db.Genres.FindAsync(genreVM.GenreId);
+                story.Genres.Add(genre);
+            }
 
             db.Entry(story).State = EntityState.Modified;
 
             try
             {
-                db.SaveChanges();
+                //db.SaveChanges();
+                await db.SaveChangesAsync().ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -351,7 +376,7 @@ namespace ProjectXwebAPI.Controllers
 
         // POST: api/Stories
         [ResponseType(typeof(StoryVM))]
-        public IHttpActionResult PostStory(StoryVM storyVM)
+        public async Task<IHttpActionResult> PostStory(StoryVM storyVM)
         {
             if (!ModelState.IsValid)
             {
@@ -360,9 +385,15 @@ namespace ProjectXwebAPI.Controllers
 
             Story story = new Story();
             ConvertStoryVM(ref story, storyVM);
+            foreach (var genreVM in storyVM.Genres)
+            {
+                Genre genre = await db.Genres.FindAsync(genreVM.GenreId);
+                story.Genres.Add(genre);
+            }
 
             db.Stories.Add(story);
-            db.SaveChanges();
+            await db.SaveChangesAsync().ConfigureAwait(false);
+            //db.SaveChanges();
 
             storyVM.Update(story);
 
@@ -411,23 +442,7 @@ namespace ProjectXwebAPI.Controllers
             story.StoryStatus = storyVM.StoryStatus;
             story.StoryDescription = storyVM.StoryDescription;
             story.AuthorId = storyVM.Author.AuthorId;
-            story.Author = new Author
-            {
-                AuthorId = storyVM.Author.AuthorId,
-                AuthorName = storyVM.Author.AuthorName,
-                AuthorStatus = storyVM.Author.AuthorStatus,
-                Slug = storyVM.Author.Slug
-            };
-            story.Genres =
-                storyVM.Genres.Select(
-                    g =>
-                        new Genre
-                        {
-                            GenreId = g.GenreId,
-                            GenreName = g.GenreName,
-                            GenreStatus = g.GenreStatus,
-                            Slug = g.Slug
-                        }).ToList();
+            story.Author = db.Authors.Find(storyVM.Author.AuthorId);
             story.CreatedDate = storyVM.CreatedDate;
             story.LastEditedDate = storyVM.LastEditedDate;
             story.UserId = storyVM.UserId;

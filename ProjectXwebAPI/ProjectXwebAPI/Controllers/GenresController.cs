@@ -39,14 +39,17 @@ namespace ProjectXwebAPI.Controllers
             List<GenreVM> genreVMs = new List<GenreVM>();
             GenreVM genreVM;
 
-            if (start < 1)
+            int total = genres.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > genres.Count())
+            if (end > total)
             {
-                end = genres.Count();
+                end = total;
             }
 
             int begin = start - 1;

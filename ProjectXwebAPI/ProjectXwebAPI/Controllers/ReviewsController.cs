@@ -34,14 +34,17 @@ namespace ProjectXwebAPI.Controllers
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            if (start < 1)
+            int total = reviews.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > reviews.Count())
+            if (end > total)
             {
-                end = reviews.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -65,14 +68,17 @@ namespace ProjectXwebAPI.Controllers
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            if (start < 1)
+            int total = reviews.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > reviews.Count())
+            if (end > total)
             {
-                end = reviews.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -91,7 +97,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Review> reviews = from r in db.Reviews
                 where r.ReviewStatus == 1
-                orderby SqlFunctions.Exp((double) (r.Score/r.RateCount)) descending
+                orderby SqlFunctions.Exp(r.RateCount == 0 ? 0 : (double) (r.Score/r.RateCount)) descending
                 select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
@@ -120,14 +126,17 @@ namespace ProjectXwebAPI.Controllers
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            if (start < 1)
+            int total = reviews.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > reviews.Count())
+            if (end > total)
             {
-                end = reviews.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -151,14 +160,17 @@ namespace ProjectXwebAPI.Controllers
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
 
-            if (start < 1)
+            int total = reviews.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > reviews.Count())
+            if (end > total)
             {
-                end = reviews.Count();
+                end = total;
             }
 
             int begin = start - 1;

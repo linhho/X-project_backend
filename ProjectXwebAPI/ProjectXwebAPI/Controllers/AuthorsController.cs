@@ -42,14 +42,17 @@ namespace ProjectXwebAPI.Controllers
             List<AuthorVM> authorsVM = new List<AuthorVM>();
             AuthorVM authorVM;
 
-            if (start < 1)
+            int total = authors.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > authors.Count())
+            if (end > total)
             {
-                end = authors.Count();
+                end = total;
             }
 
             int begin = start - 1;

@@ -87,14 +87,17 @@ namespace ProjectXwebAPI.Controllers
             List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();
             ChapterStoryVM chapterVM;
 
-            if (start < 1)
+            int total = chapters.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > chapters.Count())
+            if (end > total)
             {
-                end = chapters.Count();
+                end = total;
             }
 
             int begin = start - 1;
@@ -119,14 +122,17 @@ namespace ProjectXwebAPI.Controllers
             List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();
             ChapterStoryVM chapterVM;
 
-            if (start < 1)
+            int total = chapters.Count();
+
+            if (start < 1 || start >= total || end < 1)
             {
                 start = 1;
+                end = 0;
             }
 
-            if (end > chapters.Count())
+            if (end > total)
             {
-                end = chapters.Count();
+                end = total;
             }
 
             int begin = start - 1;
