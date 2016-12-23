@@ -46,7 +46,7 @@ namespace ProjectXwebAPI
 
             config.Routes.MapHttpRoute(
                 name: "StatusApi",
-                routeTemplate: "api/{controller}/status/{start}/{end}"
+                routeTemplate: "api/{controller}/{status}/{start}/{end}"
             );
 
             config.Routes.MapHttpRoute(

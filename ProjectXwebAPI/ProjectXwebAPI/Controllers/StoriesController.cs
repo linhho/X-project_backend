@@ -71,6 +71,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Story> stories = from s in db.Stories
                 where (s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)) && s.StoryStatus == 1
+                orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -101,6 +102,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Story> stories = from s in db.Stories
                 where s.UserId.Equals(userId) && s.StoryStatus == 1
+                orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -156,6 +158,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Story> stories = from s in db.Stories
                 where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0 && s.StoryStatus == 1
+                orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -186,6 +189,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Story> stories = from s in db.Stories
                 where (s.StoryName.Contains(name) || s.Slug.Contains(name)) && s.StoryStatus == 1
+                orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -211,11 +215,12 @@ namespace ProjectXwebAPI.Controllers
             return storyVMs.AsQueryable();
         }
 
-        // GET: api/Stories/status/1/5
-        public IQueryable<StorySearchVM> GetStoriesByStatus(int start, int end)
+        // GET: api/Stories/0/1/5
+        public IQueryable<StorySearchVM> GetStoriesByStatus(int status, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.StoryStatus == 0
+                where s.StoryStatus == status
+                orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
             StorySearchVM storySearchVM;
@@ -245,16 +250,32 @@ namespace ProjectXwebAPI.Controllers
         [Route("api/Stories/users/{top}", Name = "UserRankApi")]
         public IQueryable<String> GetUserByRank(int top)
         {
-            var q = db.Stories.OrderByDescending(s => SqlFunctions.Exp((double) s.Score/s.RateCount));
+            Dictionary<string, double> users = new Dictionary<string, double>();
+            string userId;
+            double rating;
 
-            if (top > q.Count())
+            foreach (var story in db.Stories)
             {
-                top = q.Count();
+                userId = story.UserId;
+                rating = story.Score/story.RateCount;
+
+                if (users.ContainsKey(userId))
+                {
+                    users[userId] += rating;
+                }
+                else
+                {
+                    users.Add(userId, rating);
+                }
             }
 
-            IQueryable<String> users = from s in q select s.UserId;
+            if (top > users.Count())
+            {
+                top = users.Count();
+            }
 
-            return users.Take(top);
+            var q = from u in users orderby u.Value descending select u.Key;
+            return q.Take(top).AsQueryable();
         }
 
         // GET: api/Stories/5

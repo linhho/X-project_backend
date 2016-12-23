@@ -32,10 +32,10 @@ namespace ProjectXwebAPI.Controllers
             return genreVMs.AsQueryable();
         }
 
-        // GET: api/Genres/status/1/5
-        public IQueryable<GenreVM> GetGenresByStatus(int start, int end)
+        // GET: api/Genres/0/1/5
+        public IQueryable<GenreVM> GetGenresByStatus(int status, int start, int end)
         {
-            IQueryable<Genre> genres = db.Genres.Where(g => g.GenreStatus == 0);
+            IQueryable<Genre> genres = from g in db.Genres where g.GenreStatus == status orderby g.GenreName select g;
             List<GenreVM> genreVMs = new List<GenreVM>();
             GenreVM genreVM;
 

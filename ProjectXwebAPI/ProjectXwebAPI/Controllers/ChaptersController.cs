@@ -108,12 +108,12 @@ namespace ProjectXwebAPI.Controllers
             return chapterVMs.AsQueryable();
         }
 
-        // GET: api/Chapters/status/S/1/10
-        [Route("api/Chapters/status/{slug}/{start}/{end}")]
-        public IQueryable<ChapterStoryVM> GetChaptersByStatus(string slug, int start, int end)
+        // GET: api/Chapters/S/0/1/10
+        [Route("api/Chapters/{slug}/{status}/{start}/{end}")]
+        public IQueryable<ChapterStoryVM> GetChaptersByStatus(string slug, int status, int start, int end)
         {
             IQueryable<Chapter> chapters = from c in db.Chapters
-                where c.Story.Slug.Equals(slug) && c.ChapterStatus == 0
+                where c.Story.Slug.Equals(slug) && c.ChapterStatus == status
                 orderby c.ChapterNumber
                 select c;
             List<ChapterStoryVM> chapterVMs = new List<ChapterStoryVM>();

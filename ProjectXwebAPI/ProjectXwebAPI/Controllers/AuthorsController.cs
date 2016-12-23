@@ -32,10 +32,13 @@ namespace ProjectXwebAPI.Controllers
             return authorsVM.AsQueryable();
         }
 
-        // GET: api/Authors/status/1/5
-        public IQueryable<AuthorVM> GetAuthorsByStatus(int start, int end)
+        // GET: api/Authors/0/1/5
+        public IQueryable<AuthorVM> GetAuthorsByStatus(int status, int start, int end)
         {
-            IQueryable<Author> authors = db.Authors.Where(a => a.AuthorStatus == 0);
+            IQueryable<Author> authors = from a in db.Authors
+                where a.AuthorStatus == status
+                orderby a.AuthorName
+                select a;
             List<AuthorVM> authorsVM = new List<AuthorVM>();
             AuthorVM authorVM;
 

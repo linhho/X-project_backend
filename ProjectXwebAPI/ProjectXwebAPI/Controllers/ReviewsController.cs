@@ -60,6 +60,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Review> reviews = from r in db.Reviews
                 where r.UserId.Equals(userId) && r.ReviewStatus == 1
+                orderby r.ReviewId descending
                 select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
@@ -114,6 +115,7 @@ namespace ProjectXwebAPI.Controllers
         {
             IQueryable<Review> reviews = from r in db.Reviews
                 where (r.ReviewTitle.Contains(name) || r.Slug.Contains(name)) && r.ReviewStatus == 1
+                orderby r.ReviewTitle
                 select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
@@ -139,11 +141,12 @@ namespace ProjectXwebAPI.Controllers
             return reviewVMs.AsQueryable();
         }
 
-        // GET: api/Reviews/status/1/5
-        public IQueryable<ReviewVM> GetReviewsByStatus(int start, int end)
+        // GET: api/Reviews/0/1/5
+        public IQueryable<ReviewVM> GetReviewsByStatus(int status, int start, int end)
         {
             IQueryable<Review> reviews = from r in db.Reviews
-                where r.ReviewStatus == 0
+                where r.ReviewStatus == status
+                orderby r.ReviewTitle
                 select r;
             List<ReviewVM> reviewVMs = new List<ReviewVM>();
             ReviewVM reviewVM;
