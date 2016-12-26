@@ -74,7 +74,7 @@ namespace ProjectXwebAPI.Controllers
         public IQueryable<StorySearchVM> GetStoriesByAuthor(string name, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where (s.Author.AuthorName.Contains(name) || s.Author.Slug.Contains(name)) && s.StoryStatus == 1
+                where (s.Author.AuthorName.Equals(name) || s.Author.Slug.Equals(name)) && s.StoryStatus == 1
                 orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
@@ -167,7 +167,7 @@ namespace ProjectXwebAPI.Controllers
         public IQueryable<StorySearchVM> GetStoriesByGenre(string name, int start, int end)
         {
             IQueryable<Story> stories = from s in db.Stories
-                where s.Genres.Count(g => g.GenreName.Contains(name) || g.Slug.Contains(name)) > 0 && s.StoryStatus == 1
+                where s.Genres.Count(g => g.GenreName.Equals(name) || g.Slug.Equals(name)) > 0 && s.StoryStatus == 1
                 orderby s.StoryName
                 select s;
             List<StorySearchVM> storyVMs = new List<StorySearchVM>();
