@@ -264,7 +264,7 @@ namespace ProjectXwebAPI.Controllers
             db.Reviews.Add(review);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = review.ReviewId }, review);
+            return CreatedAtRoute("NameApi", new { slug = review.Slug }, review);
         }
 
         // DELETE: api/Reviews/5

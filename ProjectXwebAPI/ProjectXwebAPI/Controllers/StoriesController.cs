@@ -397,7 +397,7 @@ namespace ProjectXwebAPI.Controllers
 
             storyVM.Update(story);
 
-            return CreatedAtRoute("DefaultApi", new { id = storyVM.StoryId }, storyVM);
+            return CreatedAtRoute("NameApi", new { slug = storyVM.Slug }, storyVM);
         }
 
         // DELETE: api/Stories/5
