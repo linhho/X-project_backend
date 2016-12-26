@@ -36,7 +36,7 @@ namespace ProjectXwebAPI.Controllers
 
             int total = reviews.Count();
 
-            if (start < 1 || start >= total || end < 1)
+            if (start < 1 || (start > end && start < total) || start > total)
             {
                 start = 1;
                 end = 0;
@@ -70,7 +70,7 @@ namespace ProjectXwebAPI.Controllers
 
             int total = reviews.Count();
 
-            if (start < 1 || start >= total || end < 1)
+            if (start < 1 || (start > end && start < total) || start > total)
             {
                 start = 1;
                 end = 0;
@@ -128,7 +128,7 @@ namespace ProjectXwebAPI.Controllers
 
             int total = reviews.Count();
 
-            if (start < 1 || start >= total || end < 1)
+            if (start < 1 || (start > end && start < total) || start > total)
             {
                 start = 1;
                 end = 0;
@@ -162,7 +162,7 @@ namespace ProjectXwebAPI.Controllers
 
             int total = reviews.Count();
 
-            if (start < 1 || start >= total || end < 1)
+            if (start < 1 || (start > end && start < total) || start > total)
             {
                 start = 1;
                 end = 0;
