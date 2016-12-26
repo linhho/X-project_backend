@@ -203,6 +203,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\ChaptersController.cs" />
+    <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\GenresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReviewsController.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="ViewModels\ChapterStoryVM.cs" />
     <Compile Include="ViewModels\ChapterVM.cs" />
     <Compile Include="ViewModels\GenreVM.cs" />
+    <Compile Include="ViewModels\Image.cs" />
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\StorySearchVM.cs" />
     <Compile Include="ViewModels\StoryVM.cs" />
