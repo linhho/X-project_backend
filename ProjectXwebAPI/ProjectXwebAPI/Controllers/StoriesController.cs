@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
 using WebGrease.Css.Extensions;
+using ProjectXwebAPI.Utils;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -437,6 +438,8 @@ namespace ProjectXwebAPI.Controllers
 
         private void ConvertStoryVM(ref Story story, StoryVM storyVM)
         {
+            storyVM.Slug = SlugUtil.GenerateSlug(storyVM.StoryName);
+
             story.StoryName = storyVM.StoryName;
             story.StoryProgress = storyVM.StoryProgress;
             story.StoryStatus = storyVM.StoryStatus;

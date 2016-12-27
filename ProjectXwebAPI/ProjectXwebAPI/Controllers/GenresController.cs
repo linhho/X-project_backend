@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
+using ProjectXwebAPI.Utils;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -190,6 +191,8 @@ namespace ProjectXwebAPI.Controllers
 
         private void ConvertGenreVM(ref Genre genre, GenreVM genreVM)
         {
+            genreVM.Slug = SlugUtil.GenerateSlug(genreVM.GenreName);
+
             genre.GenreName = genreVM.GenreName;
             genre.GenreStatus = genreVM.GenreStatus;
             genre.Slug = genreVM.Slug;

@@ -20,7 +20,7 @@ namespace ProjectXwebAPI.Controllers
 
             // DEFINE THE PATH WHERE WE WANT TO SAVE THE FILES.
             string sPath = "";
-            sPath = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/");
+            sPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/");
 
             System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
             System.Web.HttpPostedFile hpf = null;

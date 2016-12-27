@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
+using ProjectXwebAPI.Utils;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -217,6 +218,8 @@ namespace ProjectXwebAPI.Controllers
                 return BadRequest();
             }
 
+            review.Slug = SlugUtil.GenerateSlug(review.ReviewTitle);
+
             var slugCount = db.Reviews.Count(r => r.Slug.StartsWith(review.Slug));
 
             if (slugCount > 0)
@@ -253,6 +256,8 @@ namespace ProjectXwebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            review.Slug = SlugUtil.GenerateSlug(review.ReviewTitle);
 
             var slugCount = db.Reviews.Count(r => r.Slug.StartsWith(review.Slug));
 

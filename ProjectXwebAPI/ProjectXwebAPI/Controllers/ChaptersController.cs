@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
+using ProjectXwebAPI.Utils;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -274,6 +275,8 @@ namespace ProjectXwebAPI.Controllers
 
         private void ConvertChapterVM(ref Chapter chapter, ChapterVM chapterVM)
         {
+            chapterVM.Slug = SlugUtil.GenerateSlug(chapterVM.ChapterTitle);
+
             chapter.StoryId = chapterVM.StoryId;
             chapter.ChapterNumber = chapterVM.ChapterNumber;
             chapter.ChapterTitle = chapterVM.ChapterTitle;

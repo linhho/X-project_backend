@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
+using ProjectXwebAPI.Utils;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -192,6 +193,8 @@ namespace ProjectXwebAPI.Controllers
 
         private void ConvertAuthorVM(ref Author author, AuthorVM authorVM)
         {
+            authorVM.Slug = SlugUtil.GenerateSlug(authorVM.AuthorName);
+
             author.AuthorName = authorVM.AuthorName;
             author.AuthorStatus = authorVM.AuthorStatus;
             author.Slug = authorVM.Slug;
