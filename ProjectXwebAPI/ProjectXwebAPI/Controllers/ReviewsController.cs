@@ -22,7 +22,7 @@ namespace ProjectXwebAPI.Controllers
         // GET: api/Reviews
         public IQueryable<Review> GetReviews()
         {
-            return db.Reviews;
+            return db.Reviews.Where(r => r.ReviewStatus == 1);
         }
 
         // GET: api/Reviews/range/1/5
@@ -270,6 +270,40 @@ namespace ProjectXwebAPI.Controllers
             db.SaveChanges();
 
             return CreatedAtRoute("NameApi", new { slug = review.Slug }, review);
+        }
+
+        // POST: api/Reviews/change/5/1
+        [Route("api/Reviews/change/{id}/{status}")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PostReviewChange(int id, int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Review review = db.Reviews.Find(id);
+            review.ReviewStatus = status;
+
+            db.Entry(review).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ReviewExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // DELETE: api/Reviews/5

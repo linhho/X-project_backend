@@ -27,7 +27,7 @@ namespace ProjectXwebAPI.Controllers
             List<StoryVM> storyVMs = new List<StoryVM>();
             StoryVM storyVM;
 
-            foreach (var story in db.Stories)
+            foreach (var story in db.Stories.Where(s => s.StoryStatus == 1))
             {
                 storyVM = new StoryVM(story);
                 storyVMs.Add(storyVM);
@@ -399,6 +399,40 @@ namespace ProjectXwebAPI.Controllers
             storyVM.Update(story);
 
             return CreatedAtRoute("NameApi", new { slug = storyVM.Slug }, storyVM);
+        }
+
+        // POST: api/Stories/change/5/1
+        [Route("api/Stories/change/{id}/{status}")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PostStoryChange(int id, int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Story story = db.Stories.Find(id);
+            story.StoryStatus = status;
+
+            db.Entry(story).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StoryExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
         // DELETE: api/Stories/5

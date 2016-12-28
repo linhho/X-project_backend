@@ -11,6 +11,7 @@ using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
 using ProjectXwebAPI.Utils;
+using WebGrease.Css.Extensions;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace ProjectXwebAPI.Controllers
             List<AuthorVM> authorsVM = new List<AuthorVM>();
             AuthorVM authorVM;
 
-            foreach (var author in db.Authors)
+            foreach (var author in db.Authors.Where(a => a.AuthorStatus == 1))
             {
                 authorVM = new AuthorVM(author);
                 authorsVM.Add(authorVM);
@@ -157,6 +158,40 @@ namespace ProjectXwebAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = authorVM.AuthorId }, authorVM);
         }
 
+        // POST: api/Authors/change/5/1
+        [Route("api/Authors/change/{id}/{status}")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PostAuthorChange(int id, int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Author author = db.Authors.Find(id);
+            author.AuthorStatus = status;
+
+            db.Entry(author).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AuthorExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.OK);
+        }
+
         // DELETE: api/Authors/5
         [ResponseType(typeof(AuthorVM))]
         public IHttpActionResult DeleteAuthor(int id)
@@ -169,6 +204,7 @@ namespace ProjectXwebAPI.Controllers
 
             //db.Authors.Remove(author);
             author.AuthorStatus = -1;
+            author.Stories.ForEach(s => s.StoryStatus = -1);
             db.Entry(author).State = EntityState.Modified;
             db.SaveChanges();
 

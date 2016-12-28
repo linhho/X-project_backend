@@ -209,6 +209,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReviewsController.cs" />
     <Compile Include="Controllers\StoriesController.cs" />
+    <Compile Include="Controllers\UserWatchesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -256,6 +257,7 @@
     <Compile Include="ViewModels\ReviewVM.cs" />
     <Compile Include="ViewModels\StorySearchVM.cs" />
     <Compile Include="ViewModels\StoryVM.cs" />
+    <Compile Include="ViewModels\UserWatchVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

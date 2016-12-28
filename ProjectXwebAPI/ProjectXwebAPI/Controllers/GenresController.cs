@@ -11,6 +11,7 @@ using System.Web.Http.Description;
 using ProjectXwebAPI.Models;
 using ProjectXwebAPI.ViewModels;
 using ProjectXwebAPI.Utils;
+using WebGrease.Css.Extensions;
 
 namespace ProjectXwebAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace ProjectXwebAPI.Controllers
             List<GenreVM> genreVMs = new List<GenreVM>();
             GenreVM genreVM;
 
-            foreach (var genre in db.Genres)
+            foreach (var genre in db.Genres.Where(g => g.GenreStatus == 1))
             {
                 genreVM = new GenreVM(genre);
                 genreVMs.Add(genreVM);
@@ -155,6 +156,40 @@ namespace ProjectXwebAPI.Controllers
             return CreatedAtRoute("DefaultApi", new { id = genreVM.GenreId }, genreVM);
         }
 
+        // POST: api/Genres/change/5/1
+        [Route("api/Genres/change/{id}/{status}")]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PostGenreChange(int id, int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Genre genre = db.Genres.Find(id);
+            genre.GenreStatus = status;
+
+            db.Entry(genre).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GenreExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.OK);
+        }
+
         // DELETE: api/Genres/5
         [ResponseType(typeof(GenreVM))]
         public IHttpActionResult DeleteGenre(int id)
@@ -167,6 +202,7 @@ namespace ProjectXwebAPI.Controllers
 
             //db.Genres.Remove(genre);
             genre.GenreStatus = -1;
+            genre.Stories.ForEach(s => s.StoryStatus = -1);
             db.Entry(genre).State = EntityState.Modified;
             db.SaveChanges();
 
